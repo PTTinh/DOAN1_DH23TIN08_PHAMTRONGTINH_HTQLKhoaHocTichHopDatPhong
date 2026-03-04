@@ -21,6 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'status',
+        'suspended_at',
+        'suspended_by',
+        'suspension_reason',
     ];
 
     /**
@@ -43,7 +48,47 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'suspended_at' => 'datetime',
         ];
     }
 	
+	public function course_registrations()
+	{
+		return $this->hasMany(CourseRegistration::class, 'created_by');
+	}
+
+	public function room_bookings()
+	{
+		return $this->hasMany(RoomBooking::class, 'created_by');
+	}
+
+	// Quan hệ với người đình chỉ
+	public function suspendedBy()
+	{
+		return $this->belongsTo(User::class, 'suspended_by');
+	}
+
+	// Scope để lọc user đang hoạt động
+	public function scopeActive($query)
+	{
+		return $query->where('status', 'active');
+	}
+
+	// Scope để lọc user bị đình chỉ
+	public function scopeSuspended($query)
+	{
+		return $query->where('status', 'suspended');
+	}
+
+	// Check xem user có bị đình chỉ không
+	public function isSuspended(): bool
+	{
+		return $this->status === 'suspended';
+	}
+
+	// Check xem user có đang hoạt động không
+	public function isActive(): bool
+	{
+		return $this->status === 'active';
+	}
 }
