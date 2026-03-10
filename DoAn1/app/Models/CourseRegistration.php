@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\Model;
 class CourseRegistration extends Model
 {
 	protected $table = 'course_registrations';
+	protected $primaryKey = 'registration_id';
 
 	protected $casts = [
 		'created_by' => 'int',
@@ -65,6 +66,6 @@ class CourseRegistration extends Model
 
 	public function course()
 	{
-		return $this->belongsTo(Course::class);
+		return $this->belongsTo(Course::class, 'course_id');
 	}
 }

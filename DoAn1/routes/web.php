@@ -5,8 +5,8 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\Admin\RoomBookingDetailController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NewsController;
-use App\Http\Controllers\SitemapController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/khoa-hoc', [CourseController::class, 'index'])->name('courses.index');
@@ -29,10 +29,3 @@ Route::middleware(['web', 'auth'])->prefix('admin')->group(function () {
     Route::post('/chi-tiet-dat-phong/{id}/reject', [RoomBookingDetailController::class, 'reject'])->name('admin.chi-tiet-dat-phong.reject');
     Route::post('/chi-tiet-dat-phong/{id}/cancel', [RoomBookingDetailController::class, 'cancel'])->name('admin.chi-tiet-dat-phong.cancel');
 });
-// Sitemap route
-Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
-
-// Login route để redirect về trang chủ
-Route::get('/login', function () {
-    return redirect('/');
-})->name('login');

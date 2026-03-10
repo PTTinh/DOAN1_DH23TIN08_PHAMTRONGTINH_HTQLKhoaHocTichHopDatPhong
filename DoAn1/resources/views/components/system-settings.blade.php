@@ -1,10 +1,4 @@
 <div class="system-settings">
-    {{-- Custom CSS --}}
-    @if(!empty($settings['custom_css']))
-        <style>
-            {!! $settings['custom_css'] !!}
-        </style>
-    @endif
 
     {{-- Logo --}}
     @if(!empty($settings['logo']))
@@ -95,12 +89,6 @@
         </div>
     @endif
 
-    {{-- Custom JavaScript --}}
-    @if(!empty($settings['custom_js']))
-        <script>
-            {!! $settings['custom_js'] !!}
-        </script>
-    @endif
 </div>
 
 <style>

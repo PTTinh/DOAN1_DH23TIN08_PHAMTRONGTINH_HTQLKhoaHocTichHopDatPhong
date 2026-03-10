@@ -33,9 +33,10 @@ use Illuminate\Database\Eloquent\Model;
 class RoomBookingDetail extends Model
 {
 	protected $table = 'room_booking_details';
+	protected $primaryKey = 'booking_detail_id';
 
 	protected $casts = [
-		'room_booking_id' => 'int',
+		'booking_id' => 'int',
 		'booking_date' => 'datetime',
 		'start_time' => 'datetime',
 		'end_time' => 'datetime',
@@ -47,7 +48,7 @@ class RoomBookingDetail extends Model
 	];
 
 	protected $fillable = [
-		'room_booking_id',
+		'booking_id',
 		'booking_date',
 		'start_time',
 		'end_time',
@@ -66,6 +67,6 @@ class RoomBookingDetail extends Model
 
 	public function room_booking()
 	{
-		return $this->belongsTo(RoomBooking::class);
+		return $this->belongsTo(RoomBooking::class, 'booking_id');
 	}
 }

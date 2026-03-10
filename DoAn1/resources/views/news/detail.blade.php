@@ -1,5 +1,4 @@
-<x-layouts title="Tin Tức - {{ $news_item->title }}" ogTitle="{{ $news_item->seo_title }}"
-    ogDescription="{{ $news_item->seo_description }}" ogImage="{{ $news_item->seo_image }}">
+<x-layouts title="Tin Tức - {{ $news_item->title }}">
 
     <!-- Hero Section -->
     <section class="hero-section">

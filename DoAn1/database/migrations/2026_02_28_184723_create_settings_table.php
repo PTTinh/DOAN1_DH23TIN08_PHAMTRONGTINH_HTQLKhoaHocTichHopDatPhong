@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('settings', function (Blueprint $table) {
-            $table->id();
+            $table->id('setting_id');
             $table->string('setting_key', 50)->unique();
             $table->text('setting_value')->nullable();
             $table->timestamps();

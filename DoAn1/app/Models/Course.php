@@ -36,11 +36,11 @@ use Illuminate\Database\Eloquent\Model;
 class Course extends Model
 {
 	protected $table = 'courses';
+	protected $primaryKey = 'course_id';
 
 	protected $casts = [
 		'price' => 'int',
 		'category_id' => 'int',
-		'created_by' => 'int',
 		'is_price_visible' => 'boolean',
 		'allow_overflow' => 'boolean',
 		'end_registration_date' => 'datetime',
@@ -48,7 +48,7 @@ class Course extends Model
 	];
 
 	protected $fillable = [
-		'created_by',
+		'category_id',
 		'title',
 		'slug',
 		'description',
@@ -56,35 +56,26 @@ class Course extends Model
 		'featured_image',
 		'price',
 		'is_price_visible',
-		'category_id',
 		'end_registration_date',
 		'start_date',
 		'status',
 		'max_students',
 		'allow_overflow',
-		'seo_description',
-		'seo_title',
-		'seo_image'
 	];
-
-	public function creator()
-	{
-		return $this->belongsTo(User::class, 'created_by');
-	}
 
 	public function category()
 	{
-		return $this->belongsTo(Category::class);
+		return $this->belongsTo(Category::class, 'category_id');
 	}
 
 	public function course_registrations()
 	{
-		return $this->hasMany(CourseRegistration::class);
+		return $this->hasMany(CourseRegistration::class, 'course_id');
 	}
 
 	public function room_bookings()
 	{
-		return $this->hasMany(RoomBooking::class);
+		return $this->hasMany(RoomBooking::class, 'course_id');
 	}
 
 	/**

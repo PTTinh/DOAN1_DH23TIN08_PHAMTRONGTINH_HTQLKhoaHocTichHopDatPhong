@@ -42,19 +42,9 @@ class SystemSettings extends Page
                 'google_map' => $settings['google_map'] ?? '',
                 'facebook_fanpage' => $settings['facebook_fanpage'] ?? '',
                 'zalo_embed' => $settings['zalo_embed'] ?? '',
-                'custom_css' => $settings['custom_css'] ?? '',
-                'custom_js' => $settings['custom_js'] ?? '',
                 'course_unit' => $settings['course_unit'] ?? 'khóa',
                 'room_rental_unit' => $settings['room_rental_unit'] ?? 'buổi',
                 'room_unit_to_hour' => $settings['room_unit_to_hour'] ?? '1',
-                'seo_description' => $settings['seo_description'] ?? '',
-                'seo_title' => $settings['seo_title'] ?? '',
-                'seo_image' => $settings['seo_image'] ?? '',
-                'seo_keywords' => $settings['seo_keywords'] ?? '',
-                'feedback' => $settings['feedback'] ?? '',
-                'sitemap_file' => $settings['sitemap_file'] ?? '',
-                'ga_head' => $settings['ga_head'] ?? '',
-                'ga_body' => $settings['ga_body'] ?? '',
                 'youtube_embed' => $settings['youtube_embed'] ?? '',
             ]);
         } catch (\Exception $e) {
@@ -69,19 +59,9 @@ class SystemSettings extends Page
                 'google_map' => '',
                 'facebook_fanpage' => '',
                 'zalo_embed' => '',
-                'custom_css' => '',
-                'custom_js' => '',
                 'course_unit' => 'khóa',
                 'room_rental_unit' => 'buổi',
                 'room_unit_to_hour' => '1',
-                'seo_description' => '',
-                'seo_title' => '',
-                'seo_keywords' => '',
-                'seo_image' => '',
-                'feedback' => '',
-                'sitemap_file' => '',
-                'ga_head' => '',
-                'ga_body' => '',
                 'youtube_embed' => '',
             ]);
         }
@@ -238,32 +218,6 @@ class SystemSettings extends Page
                             ->extraAttributes([
                                 'style' => 'font-family: "Fira Code", "JetBrains Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace; font-size: 14px;'
                             ]),
-                    ]),
-
-                Section::make('Tùy chỉnh giao diện')
-                    ->description('CSS và JavaScript tùy chỉnh. Chỉ chỉnh sửa nếu bạn là lập trình viên hoặc có kiến thức về CSS/JS')
-                    ->schema([
-                        Textarea::make('custom_css')
-                            ->label('CSS tùy chỉnh')
-                            ->rows(8)
-                            ->extraAttributes([
-                                'style' => 'font-family: "Fira Code", "JetBrains Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace; font-size: 14px;'
-                            ])
-                            ->placeholder('/* CSS tùy chỉnh */
-body {
-    font-family: \'Arial\', sans-serif;
-}')
-                            ->helperText('Thêm CSS tùy chỉnh để thay đổi giao diện website'),
-
-                        Textarea::make('custom_js')
-                            ->label('JavaScript tùy chỉnh')
-                            ->rows(8)
-                            ->extraAttributes([
-                                'style' => 'font-family: "Fira Code", "JetBrains Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace; font-size: 14px;'
-                            ])
-                            ->placeholder('// JavaScript tùy chỉnh
-console.log(\'Hello World\');')
-                            ->helperText('Thêm JavaScript tùy chỉnh để thêm chức năng cho website'),
                     ]),
             ])
             ->statePath('data');

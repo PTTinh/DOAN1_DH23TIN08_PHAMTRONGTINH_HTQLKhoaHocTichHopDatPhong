@@ -144,34 +144,8 @@ class NewsResource extends Resource
                             ->label('Tin tức nổi bật')
                             ->helperText('Tin tức nổi bật sẽ được ưu tiên hiển thị hơn các tin khác'),
                             
-                        Forms\Components\TextInput::make('view_count')
-                            ->label('Lượt xem')
-                            ->numeric()
-                            ->default(0)
-                            ->readOnly(),
                     ])
                     ->columns(2),
-                    
-                Forms\Components\Section::make('SEO & Meta Data')
-                    ->schema([
-                        Forms\Components\TextInput::make('seo_image')
-                            ->label('Ảnh SEO')
-                            ->maxLength(500)
-                            ->helperText('Ảnh được sử dụng khi chia sẻ trên mạng xã hội, để trống sẽ dùng ảnh bìa.'),
-
-                        Forms\Components\TextInput::make('seo_title')
-                            ->label('Tiêu đề SEO')
-                            ->maxLength(500)
-                            ->helperText('Tiêu đề tối ưu cho công cụ tìm kiếm'),
-                            
-                        Forms\Components\Textarea::make('seo_description')
-                            ->label('Mô tả SEO')
-                            ->maxLength(2000)
-                            ->rows(3)
-                            ->helperText('Mô tả ngắn gọn cho công cụ tìm kiếm'),
-                    ])
-                    ->columns(1)
-                    ->collapsible(),
             ]);
     }
 
@@ -214,13 +188,6 @@ class NewsResource extends Resource
                     ->falseIcon('heroicon-o-x-circle')
                     ->trueColor('success')
                     ->falseColor('danger'),
-                    
-                Tables\Columns\TextColumn::make('view_count')
-                    ->label('Lượt xem')
-                    ->numeric()
-                    ->sortable()
-                    ->badge()
-                    ->color('success'),
                     
                 Tables\Columns\TextColumn::make('published_at')
                     ->label('Ngày xuất bản')

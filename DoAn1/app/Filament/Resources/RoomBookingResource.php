@@ -493,19 +493,6 @@ class RoomBookingResource extends Resource
                             $roomBookingService->updateDuplicateStatus($record->room_id);
                             $record->refresh();
 
-                            Log::info('Room booking approved', [
-                                'booking_id' => $record->id,
-                                'booking_code' => $record->booking_code,
-                                'room_id' => $record->room_id,
-                                'room_name' => $record->room->name ?? 'Unknown',
-                                'customer_name' => $record->customer_name,
-                                'start_date' => $record->start_date,
-                                'end_date' => $record->end_date,
-                                'approved_by_user_id' => Auth::id(),
-                                'approved_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
                             //nếu có email thì gửi thông báo
                             if ($record->customer_email) {
                                 // Gửi email thông báo
@@ -529,19 +516,6 @@ class RoomBookingResource extends Resource
                             $updateCnt = $record->room_booking_details()->update(['status' => 'rejected', 'rejected_by' => Auth::id()]);
                             $record->refresh();
 
-                            Log::info('Room booking rejected', [
-                                'booking_id' => $record->id,
-                                'booking_code' => $record->booking_code,
-                                'room_id' => $record->room_id,
-                                'room_name' => $record->room->name ?? 'Unknown',
-                                'customer_name' => $record->customer_name,
-                                'start_date' => $record->start_date,
-                                'end_date' => $record->end_date,
-                                'rejected_by_user_id' => Auth::id(),
-                                'rejected_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
                             //nếu có email thì gửi thông báo
                             if ($record->customer_email) {
                                 // Gửi email thông báo
@@ -572,19 +546,7 @@ class RoomBookingResource extends Resource
                             $roomBookingService->updateDuplicateStatus($record->room_id);
                             $record->refresh();
 
-                            Log::info('Room booking cancelled by admin', [
-                                'booking_id' => $record->id,
-                                'booking_code' => $record->booking_code,
-                                'room_id' => $record->room_id,
-                                'room_name' => $record->room->name ?? 'Unknown',
-                                'customer_name' => $record->customer_name,
-                                'start_date' => $record->start_date,
-                                'end_date' => $record->end_date,
-                                'cancelled_by_user_id' => Auth::id(),
-                                'cancelled_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
+                           
                             //nếu có email thì gửi thông báo
                             if ($record->customer_email) {
                                 // Gửi email thông báo
@@ -613,35 +575,9 @@ class RoomBookingResource extends Resource
                         ->disabled(fn(RoomBooking $record) => $record->status !== 'rejected')
                         ->requiresConfirmation()
                         ->action(function (RoomBooking $record) {
-                            if ($record->status !== 'rejected') {
-                                Log::warning('Attempted to delete non-rejected booking', [
-                                    'booking_id' => $record->id,
-                                    'booking_code' => $record->booking_code,
-                                    'current_status' => $record->status,
-                                    'user_id' => Auth::id(),
-                                    'user_name' => Auth::user()->name ?? 'Unknown',
-                                    'ip_address' => request()->ip(),
-                                ]);
+                            if ($record->status !== 'rejected') {  
                                 return; // Không xóa nếu không phải yêu cầu bị từ chối
                             }
-
-                            // Log trước khi xóa để giữ thông tin
-                            Log::info('Room booking deleted', [
-                                'booking_id' => $record->id,
-                                'booking_code' => $record->booking_code,
-                                'room_id' => $record->room_id,
-                                'room_name' => $record->room->name ?? 'Unknown',
-                                'customer_name' => $record->customer_name,
-                                'customer_phone' => $record->customer_phone,
-                                'customer_email' => $record->customer_email,
-                                'start_date' => $record->start_date,
-                                'end_date' => $record->end_date,
-                                'status' => $record->status,
-                                'deleted_by_user_id' => Auth::id(),
-                                'deleted_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
 
                             $record->delete();
                             // xóa các chi tiết liên quan
@@ -705,17 +641,6 @@ class RoomBookingResource extends Resource
                                 }
                             }
 
-                            Log::info('Bulk approve room bookings completed', [
-                                'approved_count' => $approvedCount,
-                                'duplicate_count' => $duplicateCount,
-                                'total_selected' => count($records),
-                                'approved_bookings' => $approvedBookings,
-                                'approved_by_user_id' => Auth::id(),
-                                'approved_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
-
                             \Filament\Notifications\Notification::make()
                                 ->title('Hoàn thành duyệt hàng loạt')
                                 ->body("Đã duyệt {$approvedCount} yêu cầu." .
@@ -761,16 +686,6 @@ class RoomBookingResource extends Resource
                                     }
                                 }
                             }
-
-                            Log::info('Bulk reject room bookings completed', [
-                                'rejected_count' => $rejectedCount,
-                                'total_selected' => count($records),
-                                'rejected_bookings' => $rejectedBookings,
-                                'rejected_by_user_id' => Auth::id(),
-                                'rejected_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
 
                             \Filament\Notifications\Notification::make()
                                 ->title('Hoàn thành từ chối hàng loạt')
@@ -823,16 +738,6 @@ class RoomBookingResource extends Resource
                                 }
                             }
 
-                            Log::info('Bulk cancel room bookings completed', [
-                                'cancelled_count' => $cancelledCount,
-                                'total_selected' => count($records),
-                                'cancelled_bookings' => $cancelledBookings,
-                                'cancelled_by_user_id' => Auth::id(),
-                                'cancelled_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
-
                             \Filament\Notifications\Notification::make()
                                 ->title('Hoàn thành hủy hàng loạt')
                                 ->body("Đã hủy {$cancelledCount} yêu cầu.")
@@ -875,16 +780,6 @@ class RoomBookingResource extends Resource
                                     $deletedCount++;
                                 }
                             }
-
-                            Log::info('Bulk delete room bookings completed', [
-                                'deleted_count' => $deletedCount,
-                                'total_selected' => count($records),
-                                'deleted_bookings' => $deletedBookings,
-                                'deleted_by_user_id' => Auth::id(),
-                                'deleted_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
 
                             \Filament\Notifications\Notification::make()
                                 ->title('Hoàn thành xóa hàng loạt')

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('courses', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->id('course_id');
+            $table->unsignedBigInteger('category_id');
             $table->string('title', 255);
             $table->string('slug', 255);
             $table->text('description')->nullable();
@@ -21,19 +21,14 @@ return new class extends Migration
             $table->string('featured_image', 255)->nullable();
             $table->decimal('price', 19, 0)->default(0);
             $table->boolean('is_price_visible')->default(true);
-            $table->unsignedBigInteger('category_id');
+            $table->integer('max_students')->nullable();
             $table->date('end_registration_date')->nullable();
             $table->date('start_date')->nullable();
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
-            $table->integer('max_students')->nullable();
             $table->boolean('allow_overflow')->default(false)->comment('Cho phép nhận thêm học viên khi đã đủ số lượng');
             $table->timestamps();
-            $table->string('seo_description', 2000)->nullable();
-            $table->string('seo_title', 500)->nullable();
-            $table->string('seo_image', 1000)->nullable();
 
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('restrict');
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('category_id', 'fk_courses_category_id')->references('category_id')->on('categories')->onDelete('restrict');
         });
     }
 

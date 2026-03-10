@@ -23,11 +23,6 @@ class ListEquipment extends ListRecords
                         ->label('Tên thiết bị')
                         ->required()
                         ->maxLength(100),
-                    // created_by
-                    Forms\Components\TextInput::make('created_by')
-                        ->label('Người tạo')
-                        ->default(Auth::id())
-                        ->hidden(),
                 ])
                 ->modalWidth('md')
                 ->createAnother(false),

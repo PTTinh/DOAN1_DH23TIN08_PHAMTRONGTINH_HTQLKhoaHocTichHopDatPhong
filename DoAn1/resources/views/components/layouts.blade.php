@@ -8,10 +8,6 @@
     <title>
         {{ $attributes['title'] ? $attributes['title'] . ' - ' : '' }}{{ App\Helpers\SettingHelper::get('center_name', 'Trung tâm đào tạo') }}
     </title>
-
-    <x-seo ogTitle="{{ $attributes['ogTitle'] ?? App\Helpers\SettingHelper::get('seo_title', 'Chưa cập nhật') }}"
-        ogDescription="{{ $attributes['ogDescription'] ?? App\Helpers\SettingHelper::get('seo_description', 'Chưa cập nhật') }}"
-        ogImage="{{ $attributes['ogImage'] ?? asset('storage/' . App\Helpers\SettingHelper::get('seo_image')) }}" />
     <link rel="icon" href="{{ asset('storage/' . App\Helpers\SettingHelper::get('logo')) }}" type="image/png">
     <link href="{{ asset('vendor/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.css') }}">
@@ -20,14 +16,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
  
     <link rel="stylesheet" href="{{ asset('css/bootstrap-custom.css') }}">
-    @if (App\Helpers\SettingHelper::get('custom_css'))
-        <style>
-            {!! App\Helpers\SettingHelper::get('custom_css') !!}
-        </style>
-    @endif
-    @if (App\Helpers\SettingHelper::get('ga_head'))
-        {!! App\Helpers\SettingHelper::get('ga_head') !!}
-    @endif
 </head>
 
 <body>

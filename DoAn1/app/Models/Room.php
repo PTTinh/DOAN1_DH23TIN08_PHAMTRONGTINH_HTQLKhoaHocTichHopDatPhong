@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
 	protected $table = 'rooms';
+	protected $primaryKey = 'room_id';
 
 	protected $casts = [
 		'capacity' => 'int'
@@ -42,14 +43,11 @@ class Room extends Model
 		'status',
 		'price',
 		'image',
-		'seo_description',
-		'seo_title',
-		'seo_image'
 	];
 
 	public function room_bookings()
 	{
-		return $this->hasMany(RoomBooking::class);
+		return $this->hasMany(RoomBooking::class, 'room_id');
 	}
 
 	public function equipment()

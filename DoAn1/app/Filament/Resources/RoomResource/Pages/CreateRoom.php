@@ -12,8 +12,6 @@ class CreateRoom extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $imgFullUrl = asset('storage/' . $data['image']);
-        $data['seo_image'] = empty($data['seo_image']) ? $imgFullUrl : trim($data['seo_image']);
         return $data;
     }
 

@@ -12,23 +12,23 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('course_registrations', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->id('registration_id');
             $table->unsignedBigInteger('course_id');
+            $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamp('registration_date')->useCurrent();
-            $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed'])->default('pending');
-            $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
-            $table->decimal('actual_price', 15, 0)->nullable()->comment('Số tiền đã thu của học viên');
-            $table->timestamps();
             $table->string('student_name');
             $table->string('student_email')->nullable();
             $table->string('student_phone');
             $table->string('student_address')->nullable()->default(null);
             $table->date('student_birth_date')->nullable();
             $table->string('student_gender')->nullable();
+            $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
+            $table->decimal('actual_price', 15, 0)->nullable()->comment('Số tiền đã thu của học viên');
+            $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed'])->default('pending');
+            $table->timestamps();
 
-            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('course_id', 'fk_course_registrations_course_id')->references('course_id')->on('courses')->onDelete('cascade');
+            $table->foreign('created_by', 'fk_course_registrations_created_by')->references('id')->on('users')->onDelete('set null');
             $table->index('student_phone');
         });
     }

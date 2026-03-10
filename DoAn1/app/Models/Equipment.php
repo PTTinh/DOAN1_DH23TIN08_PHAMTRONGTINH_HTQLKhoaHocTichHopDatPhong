@@ -25,20 +25,11 @@ use Illuminate\Database\Eloquent\Model;
 class Equipment extends Model
 {
 	protected $table = 'equipments';
-
-	protected $casts = [
-		'created_by' => 'int',
-	];
+	protected $primaryKey = 'equipment_id';
 
 	protected $fillable = [
-		'created_by',
 		'name',
 	];
-
-	public function creator()
-	{
-		return $this->belongsTo(User::class, 'created_by');
-	}
 
 	public function rooms()
 	{

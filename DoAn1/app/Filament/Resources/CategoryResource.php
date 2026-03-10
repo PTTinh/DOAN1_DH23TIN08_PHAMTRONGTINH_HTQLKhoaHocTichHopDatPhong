@@ -46,7 +46,11 @@ class CategoryResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->label('Tên danh mục')
                             ->required()
-                            ->maxLength(100),
+                            ->maxLength(100)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                $set('slug', \Illuminate\Support\Str::slug($state));
+                            }),
                         Forms\Components\TextInput::make('slug')
                             ->required()
                             ->label('Slug danh mục')

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('news', function (Blueprint $table) {
-            $table->id();
+            $table->id('news_id');
             $table->string('title', 500)->nullable();
             $table->string('slug', 500)->nullable();
             $table->text('summary')->nullable();
@@ -23,15 +23,12 @@ return new class extends Migration
             $table->boolean('is_published')->default(false);
             $table->datetime('published_at')->nullable();
             $table->integer('view_count')->default(0);
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->string('seo_title', 500)->nullable();
-            $table->string('seo_image', 1000)->nullable();
-            $table->string('seo_description', 2000)->nullable();
+            $table->unsignedBigInteger('news_category_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('author_id')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('category_id')->references('id')->on('news_categories')->onDelete('set null');
-            $table->index(['is_published', 'published_at', 'is_featured']);
+            $table->foreign('author_id', 'fk_news_author_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('news_category_id', 'fk_news_category_id')->references('news_category_id')->on('news_categories')->onDelete('set null');
+            $table->index(['is_published', 'published_at', 'is_featured'], 'idx_news_published_featured');
         });
     }
 

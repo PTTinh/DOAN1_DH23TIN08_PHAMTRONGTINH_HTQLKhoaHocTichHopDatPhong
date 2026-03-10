@@ -62,10 +62,6 @@ class EquipmentResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->label('Tên thiết bị')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('creator.name')
-                    ->label('Người tạo')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Ngày tạo')
                     ->dateTime('d/m/Y H:i')
@@ -108,10 +104,6 @@ class EquipmentResource extends Resource
                             ->label('Tên thiết bị')
                             ->required()
                             ->maxLength(100),
-                        Forms\Components\TextInput::make('created_by')
-                            ->label('Người tạo')
-                            ->default(Auth::id())
-                            ->hidden(),
                     ])
                     ->modalWidth('md')
                     ->createAnother(false),

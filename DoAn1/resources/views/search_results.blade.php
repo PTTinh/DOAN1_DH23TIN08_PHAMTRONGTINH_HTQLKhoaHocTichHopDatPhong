@@ -14,7 +14,7 @@
     }
 @endphp
 
-<x-layouts :title="'Tìm kiếm: ' . $query" :ogTitle="'Kết quả tìm kiếm cho: ' . $query" :ogDescription="'Có ' . $total . ' kết quả cho từ khóa ' . $query">
+<x-layouts title="Kết quả tìm kiếm cho '{{ $safeQuery }}'">
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="container">

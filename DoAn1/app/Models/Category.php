@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
 	protected $table = 'categories';
+	protected $primaryKey = 'category_id';
 
 	protected $fillable = [
 		'name',
@@ -36,6 +37,6 @@ class Category extends Model
 
 	public function courses()
 	{
-		return $this->hasMany(Course::class);
+		return $this->hasMany(Course::class, 'category_id');
 	}
 }

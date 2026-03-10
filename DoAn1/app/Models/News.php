@@ -38,13 +38,13 @@ use Illuminate\Database\Eloquent\Model;
 class News extends Model
 {
 	protected $table = 'news';
+	protected $primaryKey = 'news_id';
 
 	protected $casts = [
 		'author_id' => 'int',
 		'is_featured' => 'bool',
 		'is_published' => 'bool',
 		'published_at' => 'datetime',
-		'view_count' => 'int',
 		'category_id' => 'int'
 	];
 
@@ -58,11 +58,7 @@ class News extends Model
 		'is_featured',
 		'is_published',
 		'published_at',
-		'view_count',
 		'category_id',
-		'seo_title',
-		'seo_image',
-		'seo_description'
 	];
 
 	public function user()

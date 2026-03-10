@@ -13,12 +13,6 @@ class CreateCourse extends CreateRecord
     
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        // Tự động gán người tạo là user hiện tại nếu chưa có
-        if (!isset($data['created_by']) || !$data['created_by']) {
-            $data['created_by'] = Auth::id();
-        }
-        $imgFullUrl = asset('storage/' . $data['featured_image']);
-        $data['seo_image'] = empty($data['seo_image']) ? $imgFullUrl : trim($data['seo_image']);
         return $data;
     }
     

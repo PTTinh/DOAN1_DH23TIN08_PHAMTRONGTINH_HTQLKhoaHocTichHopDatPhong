@@ -63,7 +63,6 @@ class CourseResource extends Resource
                             ->live(onBlur: true)
                             ->afterStateUpdated(function ($state, Forms\Set $set) {
                                 $set('slug', \Illuminate\Support\Str::slug($state));
-                                $set('seo_title', $state);
                             })
                             ->columnSpan([
                                 'default' => 4,
@@ -222,26 +221,6 @@ class CourseResource extends Resource
                             ->fileAttachmentsDirectory('course-attachments')
                             ->fileAttachmentsVisibility('public'),
                     ]),
-                Forms\Components\Section::make('SEO & Meta Data')
-                    ->schema([
-                        Forms\Components\TextInput::make('seo_image')
-                            ->label('Ảnh SEO')
-                            ->maxLength(500)
-                            ->helperText('Ảnh được sử dụng khi chia sẻ trên mạng xã hội, để trống sẽ dùng ảnh bìa.'),
-
-                        Forms\Components\TextInput::make('seo_title')
-                            ->label('Tiêu đề SEO')
-                            ->maxLength(500)
-                            ->helperText('Tiêu đề tối ưu cho công cụ tìm kiếm'),
-
-                        Forms\Components\Textarea::make('seo_description')
-                            ->label('Mô tả SEO')
-                            ->maxLength(2000)
-                            ->rows(3)
-                            ->helperText('Mô tả ngắn gọn cho công cụ tìm kiếm'),
-                    ])
-                    ->columns(1)
-                    ->collapsible(),
             ]);
     }
 
@@ -311,10 +290,6 @@ class CourseResource extends Resource
                         default => 'gray',
                     })
                     ->sortable(),
-                Tables\Columns\TextColumn::make('creator.name')
-                    ->label('Người tạo')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('d/m/Y H:i')
                     ->label('Ngày tạo')

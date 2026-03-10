@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('suspended_by')->nullable()->after('suspended_at');
             $table->text('suspension_reason')->nullable()->after('suspended_by');
 
-            $table->foreign('suspended_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('suspended_by', 'fk_users_suspended_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 

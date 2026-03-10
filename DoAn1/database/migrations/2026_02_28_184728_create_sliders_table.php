@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sliders', function (Blueprint $table) {
-            $table->id();
+            $table->id('slider_id');
             $table->string('title');
             $table->string('description', 1000)->nullable();
             $table->string('image_url');
@@ -21,12 +21,9 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->datetime('start_date')->nullable();
             $table->datetime('end_date')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();
-
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
-            $table->index(['is_active', 'start_date', 'end_date']);
-            $table->index('position');
+            $table->index('position', 'idx_sliders_position');
+            $table->index(['is_active', 'start_date', 'end_date'], 'idx_sliders_active_dates');
         });
     }
 

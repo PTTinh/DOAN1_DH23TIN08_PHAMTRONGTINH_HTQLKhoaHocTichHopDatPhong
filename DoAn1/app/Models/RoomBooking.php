@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\Model;
 class RoomBooking extends Model
 {
 	protected $table = 'room_bookings';
+	protected $primaryKey = 'booking_id';
 
 	protected $casts = [
 		'room_id' => 'int',
@@ -75,7 +76,7 @@ class RoomBooking extends Model
 
 	public function room()
 	{
-		return $this->belongsTo(Room::class);
+		return $this->belongsTo(Room::class, 'room_id');
 	}
 
 	public function user()
@@ -100,6 +101,6 @@ class RoomBooking extends Model
 
 	public function room_booking_details()
 	{
-		return $this->hasMany(RoomBookingDetail::class);
+		return $this->hasMany(RoomBookingDetail::class, 'booking_id');
 	}
 }

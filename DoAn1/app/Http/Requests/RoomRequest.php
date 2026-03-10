@@ -24,7 +24,7 @@ class RoomRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'room_id' => 'required|exists:rooms,id',
+            'room_id' => 'required|exists:rooms,room_id',
             'reason' => 'required|string|max:255',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date',

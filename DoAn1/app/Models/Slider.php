@@ -10,6 +10,9 @@ use Carbon\Carbon;
 class Slider extends Model
 {
     use HasFactory;
+    
+    protected $table = 'sliders';
+    protected $primaryKey = 'slider_id';
 
     protected $fillable = [
         'title',
@@ -20,7 +23,6 @@ class Slider extends Model
         'is_active',
         'start_date',
         'end_date',
-        'created_by',
     ];
 
     protected $casts = [
@@ -28,11 +30,6 @@ class Slider extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime',
     ];
-
-    public function creator(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
 
     // Scope để lấy slider đang hoạt động
     public function scopeActive($query)

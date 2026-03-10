@@ -293,23 +293,6 @@ class UserResource extends Resource
                             }
                         })
                         ->disabled(fn (User $record) => $record->id === Auth::id() || Auth::user()->role != 'admin'), // Không cho phép tự đình chỉ mình
-
-                    // Action xóa (chỉ hiển thị cho admin và chỉ với user không có dữ liệu liên quan)
-                    // Tables\Actions\DeleteAction::make()
-                    //     ->label('Xóa vĩnh viễn')
-                    //     ->requiresConfirmation()
-                    //     ->modalHeading('⚠️ NGUY HIỂM: Xóa người dùng vĩnh viễn')
-                    //     ->modalDescription('Hành động này sẽ xóa vĩnh viễn người dùng và TẤT CẢ dữ liệu liên quan. Điều này KHÔNG THỂ hoàn tác!')
-                    //     ->color('danger')
-                    //     ->icon('heroicon-o-trash')
-                    //     ->disabled(fn (User $record) => 
-                    //         $record->id === Auth::id() || 
-                    //         Auth::user()->role != 'admin' ||
-                    //         $record?->course_registrations()?->exists() ||
-                    //         $record?->room_booking_groups()?->exists() ||
-                    //         $record?->room_bookings()?->exists()
-                    //     )
-                    //     ,
                 ])
                 ->icon('heroicon-o-ellipsis-horizontal')
                 ->iconButton()
@@ -317,9 +300,7 @@ class UserResource extends Resource
                 ->extraAttributes(['class' => 'border']),
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
-                // ]),
+                
             ]);
     }
 

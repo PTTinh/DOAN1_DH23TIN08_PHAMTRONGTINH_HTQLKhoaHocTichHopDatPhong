@@ -17,8 +17,8 @@ return new class extends Migration
             $table->primary(['room_id', 'equipment_id']);
             $table->timestamps();
 
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
-            $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
+            $table->foreign('room_id', 'fk_room_equipments_room_id')->references('room_id')->on('rooms')->onDelete('cascade');
+            $table->foreign('equipment_id', 'fk_room_equipments_equipment_id')->references('equipment_id')->on('equipments')->onDelete('cascade');
         });
     }
 

@@ -23,10 +23,10 @@ class CourseRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'course_id' => 'required|exists:courses,id',
+            'course_id' => 'required|exists:courses,course_id',
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
-            'phone' => 'required|string|regex:/^0[0-9]{9}$/|unique:course_registrations,student_phone,NULL,id,course_id,' . $this->course_id,
+            'phone' => 'required|string|regex:/^0[0-9]{9}$/|unique:course_registrations,student_phone,NULL,registration_id,course_id,' . $this->course_id,
         ];
         if (\App\Helpers\RecaptchaHelper::isEnabled()) {
             $rules['g-recaptcha-response'] = [new RecaptchaRule()];

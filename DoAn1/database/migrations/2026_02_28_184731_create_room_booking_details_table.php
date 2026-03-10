@@ -12,24 +12,23 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('room_booking_details', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('room_booking_id');
-            $table->date('booking_date');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->enum('status', ['pending', 'approved', 'rejected', 'cancelled'])->default('pending');
+            $table->id('booking_detail_id');
+            $table->unsignedBigInteger('booking_id');
             $table->unsignedBigInteger('approved_by')->nullable();
             $table->unsignedBigInteger('rejected_by')->nullable();
             $table->unsignedBigInteger('cancelled_by')->nullable();
             $table->boolean('cancelled_by_customer')->default(false);
-            $table->timestamps();
+            $table->date('booking_date');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->enum('status', ['pending', 'approved', 'rejected', 'cancelled'])->default('pending');
             $table->boolean('is_duplicate')->default(false);
-
-            $table->foreign('approved_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('rejected_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('cancelled_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('room_booking_id')->references('id')->on('room_bookings')->onDelete('cascade');
-            $table->index(['room_booking_id', 'booking_date']);
+            $table->timestamps();
+            $table->foreign('approved_by', 'fk_room_booking_details_approved_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('rejected_by', 'fk_room_booking_details_rejected_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('cancelled_by', 'fk_room_booking_details_cancelled_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('booking_id', 'fk_room_booking_details_booking_id')->references('booking_id')->on('room_bookings')->onDelete('cascade');
+            $table->index(['booking_id', 'booking_date'], 'idx_room_booking_details_booking_date');
         });
     }
 

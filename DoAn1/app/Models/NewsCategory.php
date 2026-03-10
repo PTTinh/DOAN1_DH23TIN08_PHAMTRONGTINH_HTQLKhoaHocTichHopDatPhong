@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
 class NewsCategory extends Model
 {
 	protected $table = 'news_categories';
+	protected $primaryKey = 'news_category_id';
 
 	protected $fillable = [
 		'name',

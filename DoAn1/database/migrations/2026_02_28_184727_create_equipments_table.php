@@ -12,12 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('equipments', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->id('equipment_id');
             $table->string('name', 100);
             $table->timestamps();
-
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 

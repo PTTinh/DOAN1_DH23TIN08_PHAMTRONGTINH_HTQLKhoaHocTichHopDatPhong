@@ -13,9 +13,6 @@ class CreateSlider extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        // Tự động gán người tạo là user hiện tại
-        $data['created_by'] = Auth::id();
-
         return $data;
     }
 

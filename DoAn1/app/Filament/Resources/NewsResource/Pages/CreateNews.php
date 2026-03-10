@@ -13,22 +13,7 @@ class CreateNews extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        // tác giả là người dùng hiện tại
         $data['author_id'] = Auth::id();
-
-        // tạo url bao gồm protocol và domain
-        $imgFullUrl = asset('storage/' . $data['featured_image']);
-        $data['seo_image'] = empty($data['seo_image']) ? $imgFullUrl : trim($data['seo_image']);
-        
         return $data;
     }
-
-    // mẫu - afterCreate
-    // protected function afterCreate(): void
-    // {
-    //     parent::afterCreate();
-
-    //     // Redirect to the list page after creating a news item
-    //     $this->redirect(NewsResource::getUrl('index'));
-    // }
 }

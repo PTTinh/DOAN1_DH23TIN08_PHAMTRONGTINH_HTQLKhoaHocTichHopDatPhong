@@ -1,5 +1,4 @@
-<x-layouts title="Phòng Học - {{ $room->name }}" ogTitle="{{ $room->seo_title }}"
-    ogDescription="{{ $room->seo_description }}" ogImage="{{ $room->seo_image }}">
+<x-layouts title="Phòng Học - {{ $room->name }}">
 
     <!-- Hero Section -->
     <section class="hero-section">

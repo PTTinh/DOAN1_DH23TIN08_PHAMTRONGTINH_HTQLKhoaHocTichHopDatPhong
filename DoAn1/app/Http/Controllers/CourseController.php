@@ -32,7 +32,7 @@ class CourseController extends Controller
     public function category($slug)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
-        $courses = Course::where('category_id', $category->id)
+        $courses = Course::where('category_id', $category->category_id)
             ->where('status', 'published')
             ->where('start_date', '>=', now()->subDays(14))
             ->orderBy('created_at', 'desc')
