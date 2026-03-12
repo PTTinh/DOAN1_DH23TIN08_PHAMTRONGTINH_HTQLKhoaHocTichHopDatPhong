@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('customer_email')->nullable();
             $table->string('customer_phone')->nullable();
             $table->string('reason')->nullable();
+            $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
+            $table->decimal('total_amount', 19, 2)->nullable()->default(0);
             $table->date('start_date');
             $table->date('end_date')->nullable();
             $table->time('start_time')->nullable();

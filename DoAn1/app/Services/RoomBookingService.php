@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\SettingHelper;
 use App\Models\RoomBookingDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -35,14 +36,11 @@ class RoomBookingService
         $hasConflicts = false;
         $BookingApproved = false;
         if (!$isCreateAction) {
-            //kiêm tra booking đã duyệt hay chưa
             if ($record->status === 'approved') {
                 $BookingApproved = true;
             }
         }
         $staus = $BookingApproved ? 'approved' : 'pending';
-
-        Log::info('createBookingDetails called', ['record_id' => $record->id, 'data' => $data]);
 
         $startDate = \Carbon\Carbon::parse($data['start_date']);
         $endDate = \Carbon\Carbon::parse($data['end_date']);
@@ -67,15 +65,12 @@ class RoomBookingService
                 $currentDate->addDay();
             }
 
-            // Log hoặc lưu các ngày lặp lại
-            Log::info('Repeat dates calculated:', $repeatDates);
-
             // Tạo các bản ghi chi tiết cho từng ngày lặp lại
             foreach ($repeatDates as $date) {
                 // Kiểm tra xung đột lịch
                 $conflicts = $this->checkConflict($record->room_id, $data['start_time'], $data['end_time'], $date, $record->id);
                 \App\Models\RoomBookingDetail::create([
-                    'room_booking_id' => $record->id,
+                    'booking_id' => $record->booking_id,
                     'booking_date' => $date,
                     'start_time' => $data['start_time'],
                     'end_time' => $data['end_time'],
@@ -96,7 +91,7 @@ class RoomBookingService
                 // Kiểm tra xung đột lịch
                 $conflicts = $this->checkConflict($record->room_id, $data['start_time'], $data['end_time'], $date, $record->id);
                 \App\Models\RoomBookingDetail::create([
-                    'room_booking_id' => $record->id,
+                    'booking_id' => $record->booking_id,
                     'booking_date' => $date,
                     'start_time' => $data['start_time'],
                     'end_time' => $data['end_time'],
@@ -131,6 +126,8 @@ class RoomBookingService
                 ->when($hasConflicts, fn($notification) => $notification->warning()->icon('heroicon-o-exclamation-triangle'))
                 ->send();
         }
+        // Cập nhật lại tổng tiền sau khi đã tạo chi tiết
+        $this->calculateTotalAmount($record->booking_id, $totalDays);
     }
     //hàm check xung đột lịch
     public function checkConflict($roomId, $startTime, $endTime, $bookingDate, $bookingId): bool
@@ -139,7 +136,7 @@ class RoomBookingService
             // Chỉ lấy các booking không bị hủy hoặc từ chối
             $query->where('room_id', $roomId)
                 ->where('status', 'approved')
-                ->where('id', '!=', $bookingId); // Loại trừ booking hiện tại nếu có
+                ->where('booking_id', '!=', $bookingId); // Loại trừ booking hiện tại nếu có
         })
             ->where('booking_date', $bookingDate)
             ->where(function ($query) use ($startTime, $endTime) {
@@ -159,12 +156,12 @@ class RoomBookingService
     {
         $booking = \App\Models\RoomBooking::find($bookingId);
         if ($booking->status === 'approved') {
-            RoomBookingDetail::where('room_booking_id', $bookingId)
+            RoomBookingDetail::where('booking_id', $booking->booking_id)
                 ->where('booking_date', '>', now()->format('Y-m-d'))
                 ->delete();
             return;
         }
-        RoomBookingDetail::where('room_booking_id', $bookingId)->delete();
+        RoomBookingDetail::where('booking_id', $booking->booking_id)->delete();
     }
 
     //duyệt lại toàn bộ những booking detail khác liên quan đến phòng này và cập thật trạng thái is_duplicate cho booking đó
@@ -177,9 +174,9 @@ class RoomBookingService
         foreach ($bookings as $booking) {
             // Lấy tất cả các chi tiết đặt phòng liên quan đến booking này
             $hasConflict = false;
-            $bookingDetails = \App\Models\RoomBookingDetail::where('room_booking_id', $booking->id)->get();
+            $bookingDetails = \App\Models\RoomBookingDetail::where('booking_id', $booking->booking_id)->get();
             foreach ($bookingDetails as $detail) {
-                $conflict = $this->checkConflict($booking->room_id, $detail->start_time, $detail->end_time, $detail->booking_date, $booking->id);
+                $conflict = $this->checkConflict($booking->room_id, $detail->start_time, $detail->end_time, $detail->booking_date, $booking->booking_id);
                 $detail->update(['is_duplicate' => $conflict]);
                 if ($conflict)
                     $hasConflict = true;
@@ -187,5 +184,39 @@ class RoomBookingService
             // Cập nhật trạng thái is_duplicate cho booking chính
             $booking->update(['is_duplicate' => $hasConflict]);
         }
+    }
+    // Hàm tính tổng tiền cho booking
+    public function calculateTotalAmount($bookingId, $totalDays): void
+    {
+        $booking = \App\Models\RoomBooking::find($bookingId);
+        if (!$booking || !$booking->room || !$booking->start_time || !$booking->end_time) {
+            return;
+        }
+
+        $room = $booking->room;
+        $startTime = \Carbon\Carbon::parse($booking->start_time);
+        $endTime = \Carbon\Carbon::parse($booking->end_time);
+
+        // Dùng phút để có số giờ chính xác (tránh diffInHours truncate phần lẻ)
+        $hours = $startTime->diffInMinutes($endTime) / 60.0;
+
+        $unit = SettingHelper::getRoomRentalUnit();
+        $hUnit = (float) SettingHelper::getRoomUnitToHour();
+
+        if ($unit == 'giờ') {
+            // Làm tròn lên: 1.5 giờ = 2 giờ
+            $unitCount = ceil($hours);
+        } elseif ($unit == 'buổi') {
+            // Tính tỉ lệ: book 1 giờ trong buổi 4 giờ = 1/4 buổi
+            $unitCount = $hUnit > 0 ? $hours / $hUnit : $hours;
+        } elseif ($unit == 'ngày') {
+            $unitCount = ceil($hours / 24);
+        } else {
+            $unitCount = $hUnit > 0 ? $hours / $hUnit : $hours;
+        }
+
+        $totalAmount = $unitCount * $room->price * $totalDays;
+        $booking->total_amount = $totalAmount;
+        $booking->save();
     }
 }

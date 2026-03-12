@@ -47,7 +47,7 @@ class EditRoomBooking extends EditRecord
         if ($record->status == 'pending') {   
             $roomBookingService = new RoomBookingService();
             // Xóa chi tiết cũ nếu có
-            $roomBookingService->deleteBookingDetails($record->id ?? null);
+            $roomBookingService->deleteBookingDetails($record->booking_id ?? null);
             $roomBookingService->createBookingDetails($record, $data, false);
             // Cập nhật trạng thái xung đột
             $roomBookingService->updateDuplicateStatus($record->room_id);

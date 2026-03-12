@@ -52,7 +52,7 @@ class Room extends Model
 
 	public function equipment()
 	{
-		return $this->belongsToMany(Equipment::class, 'room_equipments')
+		return $this->belongsToMany(Equipment::class, 'room_equipments', 'room_id', 'equipment_id')
 					->withTimestamps();
 	}
 }

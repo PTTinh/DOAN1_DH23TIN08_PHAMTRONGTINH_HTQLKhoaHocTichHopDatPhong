@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use App\Rules\RecaptchaRule;
 
 class CourseRequest extends FormRequest
@@ -26,14 +27,20 @@ class CourseRequest extends FormRequest
             'course_id' => 'required|exists:courses,course_id',
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
-            'phone' => 'required|string|regex:/^0[0-9]{9}$/|unique:course_registrations,student_phone,NULL,registration_id,course_id,' . $this->course_id,
+            'phone' => [
+                'required',
+                'string',
+                'regex:/^0[0-9]{9}$/',
+                Rule::unique('course_registrations', 'student_phone')
+                    ->where('course_id', $this->course_id),
+            ],
         ];
         if (\App\Helpers\RecaptchaHelper::isEnabled()) {
             $rules['g-recaptcha-response'] = [new RecaptchaRule()];
         }
         return $rules;
     }
-    public function atributes(): array
+    public function attributes(): array
     {
         return [
             'course_id' => 'Khóa học',

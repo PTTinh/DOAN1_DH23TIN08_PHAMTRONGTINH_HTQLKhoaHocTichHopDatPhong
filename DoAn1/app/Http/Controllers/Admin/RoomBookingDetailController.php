@@ -39,19 +39,6 @@ class RoomBookingDetailController extends Controller
             // Kiểm tra xem có cần cập nhật trạng thái của booking chính không
             $this->updateMainBookingStatus($detail->room_booking_id);
             
-            Log::info('Room booking detail rejected', [
-                'detail_id' => $detail->id,
-                'booking_id' => $detail->room_booking_id,
-                'booking_code' => $detail->room_booking->booking_code ?? 'Unknown',
-                'booking_date' => $detail->booking_date,
-                'room_id' => $detail->room_booking->room_id ?? 'Unknown',
-                'room_name' => $detail->room_booking->room->name ?? 'Unknown',
-                'rejected_by_user_id' => Auth::id(),
-                'rejected_by_user_name' => Auth::user()->name ?? 'Unknown',
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]);
-            
             return response()->json(['success' => true, 'message' => 'Đã từ chối ngày đặt phòng thành công']);
             
         } catch (\Exception $e) {
@@ -99,19 +86,6 @@ class RoomBookingDetailController extends Controller
             
             // Kiểm tra xem có cần cập nhật trạng thái của booking chính không
             $this->updateMainBookingStatus($detail->room_booking_id);
-            
-            Log::info('Room booking detail cancelled', [
-                'detail_id' => $detail->id,
-                'booking_id' => $detail->room_booking_id,
-                'booking_code' => $detail->room_booking->booking_code ?? 'Unknown',
-                'booking_date' => $detail->booking_date,
-                'room_id' => $detail->room_booking->room_id ?? 'Unknown',
-                'room_name' => $detail->room_booking->room->name ?? 'Unknown',
-                'cancelled_by_user_id' => Auth::id(),
-                'cancelled_by_user_name' => Auth::user()->name ?? 'Unknown',
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]);
             
             return response()->json(['success' => true, 'message' => 'Đã hủy ngày đặt phòng thành công']);
             

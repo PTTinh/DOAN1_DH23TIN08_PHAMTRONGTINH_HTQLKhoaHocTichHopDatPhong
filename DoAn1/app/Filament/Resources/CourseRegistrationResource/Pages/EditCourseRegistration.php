@@ -15,7 +15,6 @@ class EditCourseRegistration extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            // Đã loại bỏ nút xóa theo yêu cầu
         ];
     }
 

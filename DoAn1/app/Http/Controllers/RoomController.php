@@ -8,8 +8,10 @@ use App\Models\RoomBooking;
 use App\Services\RoomBookingService;
 use App\Mail\BookingConfirmationNotification;
 use App\Mail\NotifyAdmin;
+use App\Models\Invoice;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\SettingHelper;
 
 class RoomController extends Controller
 {
@@ -49,6 +51,7 @@ class RoomController extends Controller
 
         $roomBookingService->createBookingDetails($booking, $data, true, false);
         $booking->refresh();
+
         Mail::to($booking->customer_email)->send(new BookingConfirmationNotification($booking));
         $adminUsers = User::where('role', '!=' , 'user')->get();
         foreach ($adminUsers as $admin) {

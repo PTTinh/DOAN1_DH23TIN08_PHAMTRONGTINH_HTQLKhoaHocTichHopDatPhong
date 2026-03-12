@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Services\RoomBookingService;
 use Filament\Support\Enums\MaxWidth;
+use Filament\Support\RawJs;
 use Illuminate\Support\Facades\Mail;
 
 class RoomBookingResource extends Resource
@@ -195,6 +196,30 @@ class RoomBookingResource extends Resource
                     ])
                     ->columns(4),
 
+                Section::make('Thông tin thanh toán')
+                    ->description('Thông tin về thanh toán của đặt phòng')
+                    ->schema([
+                        Forms\Components\Select::make('payment_status')
+                            ->label('Trạng thái thanh toán')
+                            ->options([
+                                'unpaid' => 'Chưa thanh toán',
+                                'paid' => 'Đã thanh toán',
+                                'refunded' => 'Đã hoàn tiền',
+                            ])
+                            ->disabled(),
+
+                        Forms\Components\TextInput::make('total_amount')
+                            ->label('Tổng tiền')
+                            ->integer()
+                            ->prefix('₫')
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters([',', '.'])
+                            ->dehydrateStateUsing(fn($state) => (int) str_replace([','], '', $state))
+                            ->disabled(),
+                    ])
+                    ->columns(2)
+                    ->visible(fn($livewire) => $livewire instanceof \Filament\Resources\Pages\ViewRecord),
+
                 Section::make('Thông tin quản lý')
                     ->description('Thông tin về người xử lý đặt phòng')
                     ->schema([
@@ -335,6 +360,29 @@ class RoomBookingResource extends Resource
                         default => $state,
                     }),
 
+                Tables\Columns\TextColumn::make('payment_status')
+                    ->label('Thanh toán')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'unpaid' => 'danger',
+                        'paid' => 'success',
+                        'refunded' => 'warning',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'unpaid' => 'Chưa thanh toán',
+                        'paid' => 'Đã thanh toán',
+                        'refunded' => 'Đã hoàn tiền',
+                        default => $state,
+                    }),
+
+                Tables\Columns\TextColumn::make('total_amount')
+                    ->label('Tổng tiền')
+                    ->formatStateUsing(fn($state) => number_format($state, 0, ',', '.'))
+                    ->prefix('₫ ')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('customer_email')
                     ->label('Email')
                     ->searchable()
@@ -457,6 +505,45 @@ class RoomBookingResource extends Resource
                             ]);
                         }),
 
+                    Tables\Actions\Action::make('update_payment')
+                        ->label('Cập nhật thanh toán')
+                        ->icon('heroicon-o-currency-dollar')
+                        ->form([
+                            Forms\Components\Select::make('payment_status')
+                                ->label('Trạng thái thanh toán')
+                                ->options([
+                                    'paid' => 'Đã thanh toán',
+                                    'unpaid' => 'Chưa thanh toán',
+                                    'refunded' => 'Đã hoàn tiền'
+                                ])
+                                ->required()
+                                ->native(false),
+                            Forms\Components\TextInput::make('total_amount')
+                                ->label('Tổng tiền')
+                                ->integer()
+                                ->prefix('₫')
+                                ->mask(RawJs::make('$money($input)'))
+                                ->stripCharacters([',', '.'])
+                                ->dehydrateStateUsing(fn($state) => (int) str_replace([','], '', $state))
+                        ])
+                        ->fillForm(fn(RoomBooking $record): array => [
+                            'payment_status' => $record->payment_status,
+                            'total_amount' => $record->total_amount,
+                        ])
+                        ->action(function (RoomBooking $record, array $data) {
+                            $oldPaymentStatus = $record->payment_status;
+                            $oldTotalAmount = $record->total_amount;
+
+                            $record->update([
+                                'payment_status' => $data['payment_status'],
+                                'total_amount' => $data['total_amount']
+                            ]);
+                            if ($record->student_email) {
+                                Mail::to($record->student_email)->send(new BookingConfirmationNotification($record));
+                            }
+                        })
+                        ->modalWidth('md'),
+
                     // thêm chức năng duyệt, từ chối, hủy đặt phòng
                     Tables\Actions\Action::make('approve')
                         ->label('Duyệt yêu cầu đặt phòng')
@@ -464,14 +551,6 @@ class RoomBookingResource extends Resource
                         ->action(function (RoomBooking $record) {
                             // nếu là record bị trùng lịch thì không cho duyệt
                             if ($record->is_duplicate) {
-                                Log::warning('Attempted to approve duplicate booking', [
-                                    'booking_id' => $record->id,
-                                    'booking_code' => $record->booking_code,
-                                    'user_id' => Auth::id(),
-                                    'user_name' => Auth::user()->name ?? 'Unknown',
-                                    'reason' => 'Booking has duplicate schedule',
-                                    'ip_address' => request()->ip(),
-                                ]);
 
                                 \Filament\Notifications\Notification::make()
                                     ->title('Không thể duyệt')
@@ -546,7 +625,7 @@ class RoomBookingResource extends Resource
                             $roomBookingService->updateDuplicateStatus($record->room_id);
                             $record->refresh();
 
-                           
+
                             //nếu có email thì gửi thông báo
                             if ($record->customer_email) {
                                 // Gửi email thông báo
@@ -575,7 +654,7 @@ class RoomBookingResource extends Resource
                         ->disabled(fn(RoomBooking $record) => $record->status !== 'rejected')
                         ->requiresConfirmation()
                         ->action(function (RoomBooking $record) {
-                            if ($record->status !== 'rejected') {  
+                            if ($record->status !== 'rejected') {
                                 return; // Không xóa nếu không phải yêu cầu bị từ chối
                             }
 

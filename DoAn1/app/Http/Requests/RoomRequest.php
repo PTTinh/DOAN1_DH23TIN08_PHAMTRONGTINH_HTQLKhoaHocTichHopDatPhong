@@ -76,7 +76,7 @@ class RoomRequest extends FormRequest
         });
     }
 
-    public function atributes(): array
+    public function attributes(): array
     {
         return [
             'room_id' => 'Phòng',

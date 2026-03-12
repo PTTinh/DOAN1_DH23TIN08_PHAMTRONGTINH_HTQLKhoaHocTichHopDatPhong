@@ -296,20 +296,7 @@ class CourseRegistrationResource extends Resource
                             if ($record->student_email) {
                                 Mail::to($record->student_email)->send(new CourseRegistrationNotification($record));
                             }
-                            Log::info('Course registration confirmed', [
-                                'registration_id' => $record->id,
-                                'course_id' => $record->course_id,
-                                'course_title' => $record->course->title ?? 'Unknown',
-                                'student_name' => $record->student_name,
-                                'student_phone' => $record->student_phone,
-                                'student_email' => $record->student_email,
-                                'old_status' => $oldStatus,
-                                'new_status' => 'confirmed',
-                                'confirmed_by_user_id' => Auth::id(),
-                                'confirmed_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
+                            
                         })
                         ->visible(fn(CourseRegistration $record) => $record->status === 'pending'),
 
@@ -326,20 +313,7 @@ class CourseRegistrationResource extends Resource
                             if ($record->student_email) {
                                 Mail::to($record->student_email)->send(new CourseRegistrationNotification($record));
                             }
-                            Log::info('Course registration cancelled', [
-                                'registration_id' => $record->id,
-                                'course_id' => $record->course_id,
-                                'course_title' => $record->course->title ?? 'Unknown',
-                                'student_name' => $record->student_name,
-                                'student_phone' => $record->student_phone,
-                                'student_email' => $record->student_email,
-                                'old_status' => $oldStatus,
-                                'new_status' => 'canceled',
-                                'cancelled_by_user_id' => Auth::id(),
-                                'cancelled_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
+                           
                         })
                         ->disabled(fn(CourseRegistration $record) => in_array($record->status, ['pending', 'confirmed'])),
 
@@ -357,20 +331,7 @@ class CourseRegistrationResource extends Resource
                             if ($record->student_email) {
                                 Mail::to($record->student_email)->send(new CourseRegistrationNotification($record, 'completed'));
                             }
-                            Log::info('Course registration completed', [
-                                'registration_id' => $record->id,
-                                'course_id' => $record->course_id,
-                                'course_title' => $record->course->title ?? 'Unknown',
-                                'student_name' => $record->student_name,
-                                'student_phone' => $record->student_phone,
-                                'student_email' => $record->student_email,
-                                'old_status' => $oldStatus,
-                                'new_status' => 'completed',
-                                'completed_by_user_id' => Auth::id(),
-                                'completed_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
+                          
                         })
                         ->disabled(fn(CourseRegistration $record) => $record->status === 'confirmed'),
 
@@ -410,44 +371,13 @@ class CourseRegistrationResource extends Resource
                             if ($record->student_email) {
                                 Mail::to($record->student_email)->send(new CourseRegistrationNotification($record));
                             }
-                            Log::info('Course registration payment updated', [
-                                'registration_id' => $record->id,
-                                'course_id' => $record->course_id,
-                                'course_title' => $record->course->title ?? 'Unknown',
-                                'student_name' => $record->student_name,
-                                'student_phone' => $record->student_phone,
-                                'old_payment_status' => $oldPaymentStatus,
-                                'new_payment_status' => $data['payment_status'],
-                                'old_actual_price' => $oldActualPrice,
-                                'new_actual_price' => $data['actual_price'],
-                                'updated_by_user_id' => Auth::id(),
-                                'updated_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
+                         
                         })
                         ->modalWidth('md'),
 
                     Tables\Actions\DeleteAction::make()
                         ->before(function (CourseRegistration $record) {
-                            // Log trước khi xóa để giữ thông tin
-                            Log::info('Course registration deleted', [
-                                'registration_id' => $record->id,
-                                'course_id' => $record->course_id,
-                                'course_title' => $record->course->title ?? 'Unknown',
-                                'student_name' => $record->student_name,
-                                'student_phone' => $record->student_phone,
-                                'student_email' => $record->student_email,
-                                'student_address' => $record->student_address,
-                                'status' => $record->status,
-                                'payment_status' => $record->payment_status,
-                                'actual_price' => $record->actual_price,
-                                'registration_date' => $record->registration_date,
-                                'deleted_by_user_id' => Auth::id(),
-                                'deleted_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
+                            
                         })
                         ->disabled(fn(CourseRegistration $record) => Auth::user()->role !== 'admin')
                 ])
@@ -486,16 +416,6 @@ class CourseRegistrationResource extends Resource
                                 }
                             }
 
-                            Log::info('Bulk confirm course registrations completed', [
-                                'confirmed_count' => $confirmedCount,
-                                'total_selected' => count($records),
-                                'confirmed_registrations' => $confirmedRegistrations,
-                                'confirmed_by_user_id' => Auth::id(),
-                                'confirmed_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
-
                             \Filament\Notifications\Notification::make()
                                 ->title('Hoàn thành xác nhận hàng loạt')
                                 ->body("Đã xác nhận {$confirmedCount} đăng ký.")
@@ -532,16 +452,6 @@ class CourseRegistrationResource extends Resource
                                 }
                             }
 
-                            Log::info('Bulk cancel course registrations completed', [
-                                'cancelled_count' => $cancelledCount,
-                                'total_selected' => count($records),
-                                'cancelled_registrations' => $cancelledRegistrations,
-                                'cancelled_by_user_id' => Auth::id(),
-                                'cancelled_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
-
                             \Filament\Notifications\Notification::make()
                                 ->title('Hoàn thành hủy hàng loạt')
                                 ->body("Đã hủy {$cancelledCount} đăng ký.")
@@ -565,15 +475,6 @@ class CourseRegistrationResource extends Resource
                                     'actual_price' => $record->actual_price,
                                 ];
                             }
-
-                            Log::info('Bulk delete course registrations', [
-                                'deleted_count' => count($records),
-                                'deleted_registrations' => $deletedRegistrations,
-                                'deleted_by_user_id' => Auth::id(),
-                                'deleted_by_user_name' => Auth::user()->name ?? 'Unknown',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                            ]);
                         }),
                 ]),
             ]);
