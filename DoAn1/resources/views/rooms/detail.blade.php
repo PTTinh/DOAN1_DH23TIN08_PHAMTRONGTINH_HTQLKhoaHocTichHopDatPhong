@@ -117,7 +117,7 @@
                         <div class="card-body p-4">
                             <form action="{{ route('rooms.bookings') }}" method="POST" class="needs-validation">
                                 @csrf
-                                <input type="hidden" name="room_id" value="{{ $room->id }}">
+                                <input type="hidden" name="room_id" value="{{ $room->room_id }}">
                                 <x-app-input 
                                     name="name" 
                                     label="Họ và tên" 

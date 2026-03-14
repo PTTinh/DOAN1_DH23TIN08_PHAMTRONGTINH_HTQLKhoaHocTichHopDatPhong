@@ -25,10 +25,6 @@
                             <i class="bi bi-person"></i>
                             {{ $news_item->user->name }}
                         </span>
-                        <span class="d-flex align-items-center gap-2">
-                            <i class="bi bi-eye"></i>
-                            {{ $news_item->view_count }} lượt xem
-                        </span>
                     </div>
                 </div>
             </div>

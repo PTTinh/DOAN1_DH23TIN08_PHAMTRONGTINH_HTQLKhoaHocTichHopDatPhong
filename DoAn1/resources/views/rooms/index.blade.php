@@ -70,7 +70,7 @@
                                 <div class="card-img-wrapper">
                                     <img src="{{ Storage::url($room->image) }}" alt="{{ $room->name }}">
                                     <div class="room-overlay">
-                                        <a href="{{ route('rooms.show', $room->id) }}" class="btn btn-light btn-lg">
+                                        <a href="{{ route('rooms.show', $room->room_id) }}" class="btn btn-light btn-lg">
                                             <i class="bi bi-eye me-2"></i>Xem chi tiết
                                         </a>
                                     </div>
@@ -80,7 +80,7 @@
                                 </div>
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title">
-                                        <a href="{{ route('rooms.show', $room->id) }}">{{ $room->name }}</a>
+                                        <a href="{{ route('rooms.show', $room->room_id) }}">{{ $room->name }}</a>
                                     </h5>
                                     
                                     <div class="equipment-list">
@@ -97,7 +97,7 @@
                                     </div>
 
                                     <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
-                                        <a href="{{ route('rooms.show', $room->id) }}" class="btn btn-sm btn-primary">
+                                        <a href="{{ route('rooms.show', $room->room_id) }}" class="btn btn-sm btn-primary">
                                             Đặt phòng <i class="bi bi-arrow-right ms-1"></i>
                                         </a>
                                     </div>

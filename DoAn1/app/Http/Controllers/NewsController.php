@@ -20,9 +20,8 @@ class NewsController extends Controller
     public function category($slug)
     {
         $newsCategory = NewsCategory::where('slug', $slug)->firstOrFail();
-        $news = News::where('category_id', $newsCategory->id)
+        $news = News::where('news_category_id', $newsCategory->news_category_id)
             ->where('is_published', true)
-            ->orderBy('view_count', 'desc')
             ->orderBy('created_at', 'asc')
             ->get();
         return view('news.index', compact('newsCategory', 'news'));
@@ -34,12 +33,12 @@ class NewsController extends Controller
             ->where('is_published', true)
             ->firstOrFail();
         $recentNews = News::where('is_published', true)
-            ->where('id', '!=', $news_item->id)
+            ->where('news_id', '!=', $news_item->news_id)
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
-        $relatedNews = News::where('category_id', $news_item->category_id)
-            ->where('id', '!=', $news_item->id)
+        $relatedNews = News::where('news_category_id', $news_item->news_category_id)
+            ->where('news_id', '!=', $news_item->news_id)
             ->where('is_published', true)
             ->orderBy('created_at', 'desc')
             ->take(3)

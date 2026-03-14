@@ -40,7 +40,7 @@
                     </a>
                     @foreach($categories as $cat)
                         <a href="{{ route('courses.category', $cat->slug) }}" 
-                           class="filter-btn {{ isset($category) && $category->id === $cat->id ? 'active' : '' }}">
+                           class="filter-btn {{ isset($category) && $category->category_id === $cat->category_id ? 'active' : '' }}">
                             {{ $cat->name }}
                         </a>
                     @endforeach

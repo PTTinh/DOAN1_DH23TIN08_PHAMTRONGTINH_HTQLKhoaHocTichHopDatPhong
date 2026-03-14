@@ -215,7 +215,7 @@
                                 <div class="card-img-wrapper">
                                     <img src="{{ Storage::url($item->featured_image) }}" alt="{{ $item->title }}">
                                     <span class="badge bg-info position-absolute top-0 start-0 m-3">
-                                        {{ $item->news_category->name }}
+                                        {{ $item->news_category->name ?? 'Tin tức' }}
                                     </span>
                                 </div>
                                 <div class="card-body d-flex flex-column">

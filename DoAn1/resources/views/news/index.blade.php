@@ -47,7 +47,7 @@
                     </a>
                     @foreach($newsCategories as $cat)
                         <a href="{{ route('news.category', $cat->slug) }}" 
-                           class="filter-btn {{ isset($newsCategory) && $newsCategory->id === $cat->id ? 'active' : '' }}">
+                           class="filter-btn {{ isset($newsCategory) && $newsCategory->news_category_id === $cat->news_category_id ? 'active' : '' }}">
                             {{ $cat->name }}
                         </a>
                     @endforeach
@@ -80,7 +80,7 @@
                                         <div class="col-lg-6">
                                             <div class="card-body d-flex flex-column h-100 p-4 p-lg-5">
                                                 <div class="d-flex align-items-center gap-3 mb-3">
-                                                    <span class="badge bg-info">{{ $item->news_category->name }}</span>
+                                                    <span class="badge bg-info">{{ $item->news_category->name ?? 'Tin tức' }}</span>
                                                     <small class="text-muted">
                                                         <i class="bi bi-calendar-event me-1"></i>
                                                         {{ $item->published_at?->format('d/m/Y') ?? $item->created_at->format('d/m/Y') }}
@@ -94,7 +94,6 @@
                                                 </p>
                                                 <div class="d-flex justify-content-between align-items-center mt-auto pt-3">
                                                     <div class="d-flex align-items-center gap-3 text-muted small">
-                                                        <span><i class="bi bi-eye me-1"></i>{{ $item->view_count ?? 0 }} lượt xem</span>
                                                         <span><i class="bi bi-person me-1"></i>{{ $item->user->name ?? 'Admin' }}</span>
                                                     </div>
                                                     <a href="{{ route('news.show', $item->slug) }}" class="btn btn-primary">
@@ -113,13 +112,12 @@
                                     <div class="card-img-wrapper">
                                         <img src="{{ Storage::url($item->featured_image) }}" alt="{{ $item->title }}">
                                         <span class="badge bg-info position-absolute top-0 start-0 m-3">
-                                            {{ $item->news_category->name }}
+                                            {{ $item->news_category->name ?? 'Tin tức' }}
                                         </span>
                                     </div>
                                     <div class="card-body d-flex flex-column">
                                         <div class="news-meta">
                                             <span><i class="bi bi-calendar me-1"></i>{{ $item->published_at?->format('d/m/Y') ?? $item->created_at->format('d/m/Y') }}</span>
-                                            <span><i class="bi bi-eye me-1"></i>{{ $item->view_count ?? 0 }}</span>
                                         </div>
                                         <h5 class="card-title">
                                             <a href="{{ route('news.show', $item->slug) }}">
