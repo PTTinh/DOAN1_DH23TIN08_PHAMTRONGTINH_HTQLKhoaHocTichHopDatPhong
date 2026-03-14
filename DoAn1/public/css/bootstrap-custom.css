@@ -1616,3 +1616,288 @@ mark {
         height: 120px;
     }
 }
+
+/* ==========================================================================
+   28. CHATBOT WIDGET
+   ========================================================================== */
+.edu-chatbot {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    z-index: 1100;
+}
+
+.edu-chatbot__toggle {
+    width: 68px;
+    height: 68px;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 14px 30px rgba(13, 110, 253, 0.34), inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+    transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+}
+
+.edu-chatbot__toggle:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 0 0 8px rgba(13, 110, 253, 0.14), 0 18px 38px rgba(13, 110, 253, 0.4);
+    filter: saturate(1.05);
+}
+
+.edu-chatbot__toggle:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 8px rgba(13, 110, 253, 0.14), 0 0 0 3px rgba(255, 255, 255, 0.95), 0 18px 38px rgba(13, 110, 253, 0.4);
+}
+
+.edu-chatbot__robot {
+    width: 30px;
+    height: 30px;
+    fill: #fff;
+}
+
+.edu-chatbot__popup {
+    position: absolute;
+    right: 0;
+    bottom: 88px;
+    width: min(92vw, 390px);
+    height: min(76vh, 620px);
+    border-radius: 20px;
+    overflow: hidden;
+    background: #f8fbff;
+    box-shadow: 0 20px 44px rgba(13, 110, 253, 0.16), 0 6px 16px rgba(15, 23, 42, 0.12);
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px) scale(0.98);
+    transform-origin: right bottom;
+    transition: opacity var(--transition), transform var(--transition);
+}
+
+.edu-chatbot__popup.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.edu-chatbot__header {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    color: #fff;
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.edu-chatbot__title {
+    margin: 0;
+    color: #fff;
+    font-size: 0.975rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.edu-chatbot__status {
+    margin: 0.25rem 0 0;
+    font-size: 0.78rem;
+    opacity: 0.92;
+}
+
+.edu-chatbot__icon-btn {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 1.3rem;
+    line-height: 1;
+}
+
+.edu-chatbot__icon-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.edu-chatbot__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    background: linear-gradient(180deg, #f9fbff 0%, #f4f8ff 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.edu-chatbot__bubble {
+    max-width: 84%;
+    padding: 10px 13px;
+    border-radius: 18px;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    word-break: break-word;
+    white-space: pre-line;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+    animation: chatbotFadeIn 0.28s ease both;
+}
+
+.edu-chatbot__bubble--bot {
+    align-self: flex-start;
+    background: #fff;
+    color: #1f375f;
+    border: 1px solid #e2e8f0;
+    border-bottom-left-radius: 8px;
+}
+
+.edu-chatbot__bubble--user {
+    align-self: flex-end;
+    background: #0d6efd;
+    color: #fff;
+    border-bottom-right-radius: 8px;
+}
+
+.edu-chatbot__typing {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 11px 12px;
+    border-radius: 18px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.edu-chatbot__typing span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #8aa4d3;
+    animation: chatbotTyping 1.1s infinite ease-in-out;
+}
+
+.edu-chatbot__typing span:nth-child(2) {
+    animation-delay: 0.16s;
+}
+
+.edu-chatbot__typing span:nth-child(3) {
+    animation-delay: 0.32s;
+}
+
+.edu-chatbot__footer {
+    background: #fff;
+    border-top: 1px solid #e2e8f0;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edu-chatbot__input-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+}
+
+.edu-chatbot__input {
+    border: 1px solid #d8e2f0;
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 0.92rem;
+    color: #1e293b;
+    background: #fff;
+}
+
+.edu-chatbot__input:focus {
+    outline: 0;
+    border-color: #8db9ff;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.14);
+}
+
+.edu-chatbot__send {
+    border: 0;
+    border-radius: 12px;
+    padding: 0 14px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    box-shadow: 0 8px 18px rgba(13, 110, 253, 0.25);
+}
+
+.edu-chatbot__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.edu-chatbot__chip {
+    border: 1px solid #d1e2ff;
+    background: #eef4ff;
+    color: #0a58ca;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+}
+
+.edu-chatbot__chip:hover {
+    transform: translateY(-1px);
+    background: #e0edff;
+    box-shadow: 0 8px 14px rgba(13, 110, 253, 0.15);
+}
+
+@keyframes chatbotTyping {
+    0%, 80%, 100% {
+        transform: translateY(0);
+        opacity: 0.45;
+    }
+    40% {
+        transform: translateY(-2px);
+        opacity: 1;
+    }
+}
+
+@keyframes chatbotFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Keep existing contact shortcuts visible above chatbot button. */
+.floating-contact {
+    bottom: 6.35rem;
+}
+
+@media (max-width: 767.98px) {
+    .edu-chatbot {
+        right: 1rem;
+        bottom: 1rem;
+    }
+
+    .edu-chatbot__toggle {
+        width: 62px;
+        height: 62px;
+    }
+
+    .edu-chatbot__popup {
+        right: 0;
+        bottom: 80px;
+        width: min(94vw, 380px);
+        height: min(72vh, 560px);
+    }
+
+    .floating-contact {
+        right: 1rem;
+        bottom: 5.65rem;
+    }
+}

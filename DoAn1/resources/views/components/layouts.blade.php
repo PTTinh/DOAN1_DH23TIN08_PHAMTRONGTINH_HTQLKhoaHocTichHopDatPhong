@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>
         {{ $attributes['title'] ? $attributes['title'] . ' - ' : '' }}{{ App\Helpers\SettingHelper::get('center_name', 'Trung tâm đào tạo') }}
@@ -289,18 +290,8 @@
         </div>
     </footer>
 
-    <!-- Floating Contact Buttons -->
-    <div class="floating-contact">
-        <a href="tel:{{ App\Helpers\SettingHelper::get('phone', '') }}" class="floating-btn phone-btn" title="Gọi điện">
-            <i class="bi bi-telephone-fill"></i>
-        </a>
-        <a href="https://zalo.me/{{ App\Helpers\SettingHelper::get('zalo', '') }}" target="_blank" class="floating-btn zalo-btn" title="Chat Zalo">
-            <i class="bi bi-chat-dots-fill"></i>
-        </a>
-        <a href="{{ App\Helpers\SettingHelper::get('facebook_fanpage', '#') }}" target="_blank" class="floating-btn fb-btn" title="Facebook">
-            <i class="bi bi-messenger"></i>
-        </a>
-    </div>
+
+    @include('chatbot.widget')
 
     <!-- Back to Top -->
     <button class="back-to-top" id="backToTop" title="Lên đầu trang">

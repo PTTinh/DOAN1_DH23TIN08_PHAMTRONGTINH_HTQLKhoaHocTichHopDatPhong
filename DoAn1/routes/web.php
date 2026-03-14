@@ -7,6 +7,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\Admin\RoomBookingDetailController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\ChatbotController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/khoa-hoc', [CourseController::class, 'index'])->name('courses.index');
@@ -21,6 +22,12 @@ Route::get('/tin-tuc', [NewsController::class, 'index'])->name('news.index');
 Route::get('/tin-tuc/danh-muc/{slug}', [NewsController::class, 'category'])->name('news.category');
 Route::get('/tin-tuc/{slug}', [NewsController::class, 'show'])->name('news.show');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
+
+Route::prefix('chatbot')->group(function () {
+    Route::post('/message', [ChatbotController::class, 'chat'])->name('chatbot.message');
+    Route::get('/history', [ChatbotController::class, 'history'])->name('chatbot.history');
+    Route::delete('/history', [ChatbotController::class, 'clear'])->name('chatbot.clear');
+});
 
 // Admin routes for room booking details 
 Route::middleware(['web', 'auth'])->prefix('admin')->group(function () {
