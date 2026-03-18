@@ -163,10 +163,80 @@
                                 </button>
                             </div>
                         </form>
-                        <a href="tel:{{ App\Helpers\SettingHelper::get('phone', '') }}" class="btn btn-primary btn-hotline">
-                            <i class="bi bi-telephone-fill me-2"></i>
-                            <span>{{ App\Helpers\SettingHelper::get('phone', 'Hotline') }}</span>
-                        </a>
+                        @auth
+                            <div class="dropdown">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle me-1" title="{{ Auth::user()->name }}"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    @if (Route::has('auth.profile'))
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('auth.profile') }}">
+                                                <i class="bi bi-person me-2"></i>Tài khoản
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if(in_array(Auth::user()->role ?? '', ['admin', 'subadmin']))
+                                        <li>
+                                            <a class="dropdown-item" href="{{ url('/admin') }}">
+                                                <i class="bi bi-gear me-2"></i>Quản trị
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (Route::has('auth.logout') || Route::has('filament.admin.auth.logout'))
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form method="POST" action="{{ Route::has('auth.logout') ? route('auth.logout') : route('filament.admin.auth.logout') }}">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item text-danger">
+                                                    <i class="bi bi-box-arrow-right me-2"></i>Đăng xuất
+                                                </button>
+                                            </form>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
+                        @else
+                            @if (Route::has('auth.login'))
+                                <a href="{{ route('auth.login') }}" class="btn btn-outline-primary">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập
+                                </a>
+                            @elseif (Route::has('filament.admin.auth.login'))
+                                <a href="{{ route('filament.admin.auth.login') }}" class="btn btn-outline-primary">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập quản trị
+                                </a>
+                            @endif
+                        @endauth
+                    </div>
+
+                    <div class="d-lg-none pt-3 border-top mt-3">
+                        @auth
+                            <div class="d-flex gap-2">
+                                @if (Route::has('auth.profile'))
+                                    <a href="{{ route('auth.profile') }}" class="btn btn-outline-primary flex-grow-1">
+                                        <i class="bi bi-person me-1"></i>Tài khoản
+                                    </a>
+                                @endif
+                                @if (Route::has('auth.logout') || Route::has('filament.admin.auth.logout'))
+                                    <form method="POST" action="{{ Route::has('auth.logout') ? route('auth.logout') : route('filament.admin.auth.logout') }}" class="flex-grow-1">
+                                        @csrf
+                                        <button type="submit" class="btn btn-outline-danger w-100">
+                                            <i class="bi bi-box-arrow-right me-1"></i>Đăng xuất
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                        @else
+                            @if (Route::has('auth.login'))
+                                <a href="{{ route('auth.login') }}" class="btn btn-outline-primary w-100">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập
+                                </a>
+                            @elseif (Route::has('filament.admin.auth.login'))
+                                <a href="{{ route('filament.admin.auth.login') }}" class="btn btn-outline-primary w-100">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập quản trị
+                                </a>
+                            @endif
+                        @endauth
                     </div>
                 </div>
             </div>

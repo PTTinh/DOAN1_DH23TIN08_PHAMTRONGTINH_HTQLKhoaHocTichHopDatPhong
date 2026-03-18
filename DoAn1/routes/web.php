@@ -23,6 +23,26 @@ Route::get('/tin-tuc/danh-muc/{slug}', [NewsController::class, 'category'])->nam
 Route::get('/tin-tuc/{slug}', [NewsController::class, 'show'])->name('news.show');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 
+Route::prefix('tai-khoan')->name('auth.')->group(function () {
+    Route::middleware('guest')->group(function () {
+        Route::get('/dang-nhap', [AuthController::class, 'showLogin'])->name('login');
+        Route::post('/dang-nhap', [AuthController::class, 'login'])->name('login.submit');
+        Route::get('/dang-ky', [AuthController::class, 'showRegister'])->name('register');
+        Route::post('/dang-ky', [AuthController::class, 'register'])->name('register.submit');
+    });
+
+    Route::middleware('auth')->group(function () {
+        Route::get('/ho-so', [AuthController::class, 'profile'])->name('profile');
+        Route::post('/dang-ky-khoa-hoc/{registrationId}/huy', [AuthController::class, 'cancelRegistration'])->name('registrations.cancel');
+        Route::post('/dat-phong/{bookingId}/huy', [AuthController::class, 'cancelBooking'])->name('bookings.cancel');
+        Route::post('/cap-nhat-thong-tin', [AuthController::class, 'updateProfile'])->name('update-profile');
+        Route::post('/doi-mat-khau', [AuthController::class, 'changePassword'])->name('change-password');
+        Route::post('/email/gui-ma-xac-thuc', [AuthController::class, 'sendEmailVerificationCode'])->name('email.send-code');
+        Route::post('/email/xac-thuc-doi-email', [AuthController::class, 'verifyEmailChange'])->name('email.verify-change');
+        Route::post('/dang-xuat', [AuthController::class, 'logout'])->name('logout');
+    });
+});
+
 Route::prefix('chatbot')->group(function () {
     Route::post('/message', [ChatbotController::class, 'chat'])->name('chatbot.message');
     Route::get('/history', [ChatbotController::class, 'history'])->name('chatbot.history');
@@ -30,7 +50,11 @@ Route::prefix('chatbot')->group(function () {
 });
 
 // Admin routes for room booking details 
-Route::middleware(['web', 'auth'])->prefix('admin')->group(function () {
+Route::middleware([
+    'web',
+    'auth',
+    'admin.access',
+])->prefix('admin')->group(function () {
     Route::post('/room-booking-details/{id}/reject', [RoomBookingDetailController::class, 'reject'])->name('admin.room-booking-details.reject');
     Route::post('/room-booking-details/{id}/cancel', [RoomBookingDetailController::class, 'cancel'])->name('admin.room-booking-details.cancel');
     Route::post('/chi-tiet-dat-phong/{id}/reject', [RoomBookingDetailController::class, 'reject'])->name('admin.chi-tiet-dat-phong.reject');

@@ -9,8 +9,11 @@
     <article class="edu-chatbot__popup" id="eduChatPopup" aria-hidden="true">
         <header class="edu-chatbot__header">
             <div>
-                <h3 class="edu-chatbot__title">Trợ lý học tập {{ App\Helpers\SettingHelper::get('center_name', 'EduSmart') }}</h3>
-                <p class="edu-chatbot__status">Đang trực tuyến</p>
+                <h3 class="edu-chatbot__title">Trợ lý học tập</h3>
+                <p class="edu-chatbot__status">
+                    <span style="display: inline-block; width: 8px; height: 8px; background-color: #10b981; border-radius: 50%; margin-right: 6px; vertical-align: middle;"></span>
+                    Đang trực tuyến
+                </p>
             </div>
             <button class="edu-chatbot__icon-btn" type="button" id="eduChatClose" aria-label="Đóng">&times;</button>
         </header>

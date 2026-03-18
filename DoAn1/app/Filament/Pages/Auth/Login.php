@@ -95,6 +95,14 @@ class Login extends BaseLogin
                 ]);
             }
             
+            if($user->role === 'user') {
+                $message = 'Bạn không có quyền truy cập vào trang quản trị.';
+
+                throw ValidationException::withMessages([
+                    'data.email' => $message,
+                ]);
+            }
+            
             // Nếu tài khoản active, tiếp tục với authentication bình thường
             return parent::authenticate();
             

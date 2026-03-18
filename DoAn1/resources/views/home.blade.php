@@ -17,7 +17,7 @@
     </div>
 
     <!-- Hero Carousel -->
-    <section id="heroCarousel" class="carousel slide carousel-hero" data-bs-ride="carousel">
+    <section id="heroCarousel" class="carousel slide carousel-hero home-tier home-tier--hero" data-bs-ride="carousel">
         <div class="carousel-indicators">
             @foreach ($slides as $index => $slide)
                 <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $index }}"
@@ -51,7 +51,7 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="section bg-light-gray">
+    <section class="section bg-light-gray home-tier home-tier--stats">
         <div class="container">
             <div class="row g-4">
                 <div class="col-6 col-lg-3">
@@ -95,7 +95,7 @@
     </section>
 
     <!-- About Section -->
-    <section class="section" id="about">
+    <section class="section home-tier home-tier--about" id="about">
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-lg-6">
@@ -136,7 +136,7 @@
 
     <!-- Latest Courses Section -->
     @if ($courses->count() > 0)
-        <section class="section bg-light-gray">
+        <section class="section bg-light-gray home-tier home-tier--courses">
             <div class="container">
                 <div class="section-header text-center">
                     <span class="badge bg-primary bg-opacity-10 text-primary mb-3 px-3 py-2">
@@ -193,7 +193,7 @@
 
     <!-- Latest News Section -->
     @if ($news->count() > 0)
-        <section class="section">
+        <section class="section home-tier home-tier--news">
             <div class="container">
                 <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 mb-5">
                     <div>
@@ -221,7 +221,6 @@
                                 <div class="card-body d-flex flex-column">
                                     <div class="news-meta">
                                         <span><i class="bi bi-calendar me-1"></i>{{ $item->published_at?->format('d/m/Y') }}</span>
-                                        <span><i class="bi bi-eye me-1"></i>{{ $item->view_count }}</span>
                                     </div>
                                     <h5 class="card-title">
                                         <a href="{{ route('news.show', $item->slug) }}">
@@ -244,7 +243,7 @@
     @endif
 
     <!-- CTA Section -->
-    <section class="cta-section">
+    <section class="cta-section home-tier home-tier--cta">
         <div class="container text-center">
             <h3>Bạn cần tư vấn thêm về khóa học?</h3>
             <p class="mb-4">Đội ngũ tư vấn viên của chúng tôi luôn sẵn sàng hỗ trợ bạn</p>

@@ -159,7 +159,7 @@ class CourseRegistrationResource extends Resource
                             ->options([
                                 'pending' => 'Đang chờ',
                                 'confirmed' => 'Đã xác nhận',
-                                'canceled' => 'Đã hủy',
+                                'cancelled' => 'Đã hủy',
                                 'completed' => 'Đã hoàn thành',
                             ])
                             ->required(),
@@ -210,7 +210,7 @@ class CourseRegistrationResource extends Resource
                     ->formatStateUsing(fn(string $state): string => match ($state) {
                         'pending' => 'Đang chờ',
                         'confirmed' => 'Đã xác nhận',
-                        'canceled' => 'Đã hủy',
+                        'cancelled' => 'Đã hủy',
                         'completed' => 'Đã hoàn thành',
                         default => $state,
                     }),
@@ -270,7 +270,7 @@ class CourseRegistrationResource extends Resource
                     ->options([
                         'pending' => 'Đang chờ',
                         'confirmed' => 'Đã xác nhận',
-                        'canceled' => 'Đã hủy',
+                        'cancelled' => 'Đã hủy',
                         'completed' => 'Đã hoàn thành',
                     ])
                     ->multiple()
@@ -309,7 +309,7 @@ class CourseRegistrationResource extends Resource
                         ->modalDescription('Bạn có chắc chắn muốn hủy đăng ký này? Thao tác này không thể hoàn tác.')
                         ->action(function (CourseRegistration $record) {
                             $oldStatus = $record->status;
-                            $record->update(['status' => 'canceled']);
+                            $record->update(['status' => 'cancelled']);
                             if ($record->student_email) {
                                 Mail::to($record->student_email)->send(new CourseRegistrationNotification($record));
                             }
@@ -439,7 +439,7 @@ class CourseRegistrationResource extends Resource
 
                             foreach ($records as $record) {
                                 if (in_array($record->status, ['pending', 'confirmed'])) {
-                                    $record->update(['status' => 'canceled']);
+                                    $record->update(['status' => 'cancelled']);
                                     $cancelledCount++;
                                     $cancelledRegistrations[] = [
                                         'registration_id' => $record->id,

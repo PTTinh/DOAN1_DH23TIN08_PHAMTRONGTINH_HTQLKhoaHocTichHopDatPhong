@@ -15,6 +15,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Facades\Auth;
 
 class SystemSettings extends Page
 {
@@ -26,6 +27,17 @@ class SystemSettings extends Page
     protected static ?string $navigationGroup = 'Trang web';
 
     public ?array $data = [];
+
+    // Chỉ cho phép admin truy cập
+    public static function canAccess(): bool
+    {
+        return Auth::user()?->role === 'admin';
+    }
+    // Đảm bảo chỉ admin mới thấy mục này trong navigation
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()?->role === 'admin';
+    }
 
     public function mount(): void
     {
@@ -77,10 +89,6 @@ class SystemSettings extends Page
                         TextInput::make('center_name')
                             ->label('Tên trung tâm')
                             ->required()
-                            ->live(onBlur: true)
-                            ->afterStateUpdated(function ($state, Forms\Set $set) {
-                                $set('seo_title', $state);
-                            })
                             ->maxLength(255),
 
                         TextInput::make('phone')

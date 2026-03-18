@@ -1523,6 +1523,37 @@ mark {
 }
 
 /* ==========================================================================
+   27A. HOME TIER COLORS
+   ========================================================================== */
+.home-tier {
+    position: relative;
+}
+
+.home-tier--stats {
+    background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+}
+
+.home-tier--about {
+    background: linear-gradient(180deg, #ffffff 0%, #fdfefe 100%);
+    border-top: 1px solid #ecf2fb;
+    border-bottom: 1px solid #ecf2fb;
+}
+
+.home-tier--courses {
+    background: linear-gradient(180deg, #fffaf0 0%, #fff5e1 100%);
+}
+
+.home-tier--news {
+    background: linear-gradient(180deg, #f4fbf8 0%, #ebf8f2 100%);
+    border-top: 1px solid #deefe7;
+    border-bottom: 1px solid #deefe7;
+}
+
+.home-tier--cta {
+    position: relative;
+}
+
+/* ==========================================================================
    27. RESPONSIVE
    ========================================================================== */
 @media (max-width: 991.98px) {

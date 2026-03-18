@@ -48,7 +48,6 @@ class NewsResource extends Resource
                             ->live(onBlur: true)
                             ->afterStateUpdated(function ($state, Forms\Set $set) {
                                 $set('slug', Str::slug($state));
-                                $set('seo_title', $state);
                             }),
                             
                         Forms\Components\TextInput::make('slug')
@@ -57,7 +56,7 @@ class NewsResource extends Resource
                             ->maxLength(500)    
                             ->rules(['regex:/^[a-z0-9\-]+$/']),
                             
-                        Forms\Components\Select::make('category_id')
+                        Forms\Components\Select::make('news_category_id')
                             ->label('Danh mục')
                             ->relationship('news_category', 'name')
                             ->searchable()
@@ -208,7 +207,7 @@ class NewsResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('category_id')
+                Tables\Filters\SelectFilter::make('news_category_id')
                     ->label('Danh mục')
                     ->relationship('news_category', 'name')
                     ->searchable()

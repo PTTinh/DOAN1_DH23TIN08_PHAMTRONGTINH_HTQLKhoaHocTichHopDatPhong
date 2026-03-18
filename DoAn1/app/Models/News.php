@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $is_published
  * @property Carbon|null $published_at
  * @property int $view_count
- * @property int|null $category_id
+ * @property int|null $news_category_id
  * @property string|null $seo_title
  * @property string|null $seo_image
  * @property string|null $seo_description
@@ -45,7 +45,7 @@ class News extends Model
 		'is_featured' => 'bool',
 		'is_published' => 'bool',
 		'published_at' => 'datetime',
-		'category_id' => 'int'
+		'news_category_id' => 'int'
 	];
 
 	protected $fillable = [
@@ -58,7 +58,7 @@ class News extends Model
 		'is_featured',
 		'is_published',
 		'published_at',
-		'category_id',
+		'news_category_id',
 	];
 
 	public function user()
@@ -68,6 +68,6 @@ class News extends Model
 
 	public function news_category()
 	{
-		return $this->belongsTo(NewsCategory::class, 'category_id');
+		return $this->belongsTo(NewsCategory::class, 'news_category_id');
 	}
 }

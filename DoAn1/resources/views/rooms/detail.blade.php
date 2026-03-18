@@ -115,138 +115,154 @@
                             </h5>
                         </div>
                         <div class="card-body p-4">
-                            <form action="{{ route('rooms.bookings') }}" method="POST" class="needs-validation">
-                                @csrf
-                                <input type="hidden" name="room_id" value="{{ $room->room_id }}">
-                                <x-app-input 
-                                    name="name" 
-                                    label="Họ và tên" 
-                                    type="text" 
-                                    :value="old('name')" 
-                                    required 
-                                />
-                                <x-app-input 
-                                    name="email" 
-                                    label="Email" 
-                                    type="email" 
-                                    :value="old('email')" 
-                                    required 
-                                />
-                                <x-app-input 
-                                    name="phone" 
-                                    label="Số điện thoại" 
-                                    type="tel" 
-                                    :value="old('phone')" 
-                                    required 
-                                />
-                                <x-app-input 
-                                    name="participants_count" 
-                                    label="Số người tham gia" 
-                                    type="number" 
-                                    :value="old('participants_count', 5)" 
-                                    required 
-                                />
-                                <x-app-input 
-                                    name="reason" 
-                                    label="Lý do đặt phòng" 
-                                    type="text" 
-                                    :value="old('reason')" 
-                                    required 
-                                />
-                                <div class="mb-3">
-                                    <label for="notes" class="form-label">Ghi chú (không bắt buộc)</label>
-                                    <textarea class="form-control @error('notes') is-invalid @enderror" id="notes" name="notes" rows="2">{{ old('notes') }}</textarea>
-                                    @error('notes')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="room_type" class="form-label">Loại đặt phòng</label>
-                                    <select class="form-select @error('room_type') is-invalid @enderror" id="room_type" name="room_type" onchange="toggleRecurrence(this.value)">
-                                        <option value="none" {{ old('room_type') == 'none' ? 'selected' : '' }}>Đặt theo ngày</option>
-                                        <option value="weekly" {{ old('room_type') == 'weekly' ? 'selected' : '' }}>Đặt theo tuần</option>
-                                    </select>
-                                    @error('room_type')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            @auth
+                                <form action="{{ route('rooms.bookings') }}" method="POST" class="needs-validation">
+                                    @csrf
+                                    <input type="hidden" name="room_id" value="{{ $room->room_id }}">
+                                    <x-app-input 
+                                        name="name" 
+                                        label="Họ và tên" 
+                                        type="text" 
+                                        value="{{ old('name', Auth::user()->name ?? '') }}"
+                                        required 
+                                    />
+                                    <x-app-input 
+                                        name="email" 
+                                        label="Email" 
+                                        type="email" 
+                                        value="{{ old('email', Auth::user()->email ?? '') }}"
+                                        required 
+                                    />
+                                    <x-app-input 
+                                        name="phone" 
+                                        label="Số điện thoại" 
+                                        type="tel" 
+                                        value="{{ old('phone', Auth::user()->phone ?? '') }}"
+                                        required 
+                                    />
+                                    <x-app-input 
+                                        name="participants_count" 
+                                        label="Số người tham gia" 
+                                        type="number" 
+                                        value="{{ old('participants_count', 5) }}"
+                                        required 
+                                    />
+                                    <x-app-input 
+                                        name="reason" 
+                                        label="Lý do đặt phòng" 
+                                        type="text" 
+                                        value="{{ old('reason') }}"
+                                        required 
+                                    />
+                                    <div class="mb-3">
+                                        <label for="notes" class="form-label">Ghi chú (không bắt buộc)</label>
+                                        <textarea class="form-control @error('notes') is-invalid @enderror" id="notes" name="notes" rows="2">{{ old('notes') }}</textarea>
+                                        @error('notes')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="room_type" class="form-label">Loại đặt phòng</label>
+                                        <select class="form-select @error('room_type') is-invalid @enderror" id="room_type" name="room_type" onchange="toggleRecurrence(this.value)">
+                                            <option value="none" {{ old('room_type') == 'none' ? 'selected' : '' }}>Đặt theo ngày</option>
+                                            <option value="weekly" {{ old('room_type') == 'weekly' ? 'selected' : '' }}>Đặt theo tuần</option>
+                                        </select>
+                                        @error('room_type')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
 
-                                <div id="recurrence-days" class="mb-3" style="display: {{ old('room_type') == 'weekly' ? 'block' : 'none' }};">
-                                    <label class="form-label">Chọn ngày trong tuần</label>
-                                    <div class="d-flex flex-wrap gap-2">
-                                        @php
-                                            $daysOfWeek = [
-                                                'monday' => 'T2',
-                                                'tuesday' => 'T3',
-                                                'wednesday' => 'T4',
-                                                'thursday' => 'T5',
-                                                'friday' => 'T6',
-                                                'saturday' => 'T7',
-                                                'sunday' => 'CN',
-                                            ];
-                                        @endphp
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="all-days" name="all_days" value="all" {{ old('all_days') ? 'checked' : '' }}>
-                                            <label class="form-check-label small" for="all-days">Tất cả</label>
-                                        </div>
-                                        @foreach ($daysOfWeek as $key => $day)
+                                    <div id="recurrence-days" class="mb-3" style="display: {{ old('room_type') == 'weekly' ? 'block' : 'none' }};">
+                                        <label class="form-label">Chọn ngày trong tuần</label>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @php
+                                                $daysOfWeek = [
+                                                    'monday' => 'T2',
+                                                    'tuesday' => 'T3',
+                                                    'wednesday' => 'T4',
+                                                    'thursday' => 'T5',
+                                                    'friday' => 'T6',
+                                                    'saturday' => 'T7',
+                                                    'sunday' => 'CN',
+                                                ];
+                                            @endphp
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="{{ $key }}" 
-                                                    name="repeat_days[]" value="{{ $key }}" {{ in_array($key, old('repeat_days', [])) ? 'checked' : '' }}>
-                                                <label class="form-check-label small" for="{{ $key }}">{{ $day }}</label>
+                                                <input class="form-check-input" type="checkbox" id="all-days" name="all_days" value="all" {{ old('all_days') ? 'checked' : '' }}>
+                                                <label class="form-check-label small" for="all-days">Tất cả</label>
                                             </div>
-                                        @endforeach
+                                            @foreach ($daysOfWeek as $key => $day)
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="{{ $key }}" 
+                                                        name="repeat_days[]" value="{{ $key }}" {{ in_array($key, old('repeat_days', [])) ? 'checked' : '' }}>
+                                                    <label class="form-check-label small" for="{{ $key }}">{{ $day }}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row g-2">
-                                    <div class="col-6">
-                                        <x-app-input 
-                                            name="start_date" 
-                                            label="Ngày bắt đầu" 
-                                            type="date" 
-                                            :value="old('start_date')" 
-                                            required 
-                                        />
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <x-app-input 
+                                                name="start_date" 
+                                                label="Ngày bắt đầu" 
+                                                type="date" 
+                                                value="{{ old('start_date') }}"
+                                                required 
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <x-app-input 
+                                                name="end_date" 
+                                                label="Ngày kết thúc" 
+                                                type="date" 
+                                                value="{{ old('end_date') }}"
+                                                required 
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <x-app-input 
+                                                name="start_time" 
+                                                label="Giờ bắt đầu" 
+                                                type="time" 
+                                                value="{{ old('start_time') }}"
+                                                required 
+                                            />
+                                        </div>
+                                        <div class="col-6">
+                                            <x-app-input 
+                                                name="end_time" 
+                                                label="Giờ kết thúc" 
+                                                type="time" 
+                                                value="{{ old('end_time') }}"
+                                                required 
+                                            />
+                                        </div>
                                     </div>
-                                    <div class="col-6">
-                                        <x-app-input 
-                                            name="end_date" 
-                                            label="Ngày kết thúc" 
-                                            type="date" 
-                                            :value="old('end_date')" 
-                                            required 
-                                        />
-                                    </div>
-                                    <div class="col-6">
-                                        <x-app-input 
-                                            name="start_time" 
-                                            label="Giờ bắt đầu" 
-                                            type="time" 
-                                            :value="old('start_time')" 
-                                            required 
-                                        />
-                                    </div>
-                                    <div class="col-6">
-                                        <x-app-input 
-                                            name="end_time" 
-                                            label="Giờ kết thúc" 
-                                            type="time" 
-                                            :value="old('end_time')" 
-                                            required 
-                                        />
-                                    </div>
-                                </div>
 
-                                <!-- reCAPTCHA -->
-                                @if (config('services.recaptcha.enabled', false))
-                                    <x-recaptcha form-type="room-booking" />
+                                    <!-- reCAPTCHA -->
+                                    @if (config('services.recaptcha.enabled', false))
+                                        <x-recaptcha form-type="room-booking" />
+                                    @endif
+
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold mt-3">
+                                        <i class="bi bi-check-circle me-2"></i>Đặt phòng ngay
+                                    </button>
+                                </form>
+                            @else
+                                <div class="alert alert-warning">
+                                    <i class="bi bi-shield-lock me-1"></i>
+                                    Vui lòng đăng nhập để gửi yêu cầu đặt phòng.
+                                </div>
+                                @if (Route::has('auth.login'))
+                                    <a href="{{ route('auth.login') }}" class="btn btn-primary btn-lg w-100 fw-bold">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>Đăng nhập để đặt phòng
+                                    </a>
+                                @elseif (Route::has('filament.admin.auth.login'))
+                                    <a href="{{ route('filament.admin.auth.login') }}" class="btn btn-primary btn-lg w-100 fw-bold">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>Đăng nhập
+                                    </a>
                                 @endif
-
-                                <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold mt-3">
-                                    <i class="bi bi-check-circle me-2"></i>Đặt phòng ngay
-                                </button>
-                            </form>
+                            @endauth
 
                             <hr class="my-4">
                             <div class="text-center">

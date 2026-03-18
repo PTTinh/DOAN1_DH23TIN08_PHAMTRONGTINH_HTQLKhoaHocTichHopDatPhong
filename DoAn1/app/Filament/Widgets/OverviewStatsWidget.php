@@ -36,6 +36,14 @@ class OverviewStatsWidget extends BaseWidget
         // Tổng tin tức
         $totalNews = News::count();
 
+        //Tổng doanh thu từ khóa học
+        $totalRevenue = CourseRegistration::sum('actual_price');
+
+        // Tổng doanh thu từ đặt phòng đã duyệt và đã thanh toán
+        $totalBookingRevenue = RoomBooking::where('status', 'approved')
+            ->where('payment_status', 'paid')
+            ->sum('total_amount');
+
         return [
             Stat::make('Người dùng', $totalUsers)
                 ->description('Tổng số tài khoản')
@@ -61,6 +69,16 @@ class OverviewStatsWidget extends BaseWidget
                 ->description('Tổng số bài viết')
                 ->descriptionIcon('heroicon-m-newspaper')
                 ->color('primary'),
+            
+            Stat::make('Doanh thu khóa học', number_format($totalRevenue, 0, ',', '.'))
+                ->description('Tổng doanh thu từ khóa học')
+                ->descriptionIcon('heroicon-m-currency-dollar')
+                ->color('success'),
+                
+            Stat::make('Doanh thu đặt phòng', number_format($totalBookingRevenue, 0, ',', '.'))
+                ->description('Tổng doanh thu từ đặt phòng')
+                ->descriptionIcon('heroicon-m-currency-dollar')
+                ->color('warning'),
         ];
     }
 }

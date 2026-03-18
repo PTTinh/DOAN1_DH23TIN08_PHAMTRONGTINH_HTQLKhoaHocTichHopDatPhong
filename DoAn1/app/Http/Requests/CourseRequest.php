@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use App\Rules\CoursePhoneRule;
 use App\Rules\RecaptchaRule;
 
 class CourseRequest extends FormRequest
@@ -31,8 +31,7 @@ class CourseRequest extends FormRequest
                 'required',
                 'string',
                 'regex:/^0[0-9]{9}$/',
-                Rule::unique('course_registrations', 'student_phone')
-                    ->where('course_id', $this->course_id),
+                new CoursePhoneRule($this->course_id),
             ],
         ];
         if (\App\Helpers\RecaptchaHelper::isEnabled()) {

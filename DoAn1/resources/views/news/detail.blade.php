@@ -19,7 +19,7 @@
                     <div class="d-flex gap-4 flex-wrap mt-3">
                         <span class="d-flex align-items-center gap-2">
                             <i class="bi bi-calendar-event"></i>
-                            {{ $news_item->published_at->format('d/m/Y') }}
+                            {{ $news_item->published_at?->format('d/m/Y') }}
                         </span>
                         <span class="d-flex align-items-center gap-2">
                             <i class="bi bi-person"></i>
@@ -101,7 +101,7 @@
                                                 {{ Str::limit($item->title, 50) }}
                                             </h6>
                                             <small class="text-muted">
-                                                <i class="bi bi-calendar me-1"></i>{{ $item->published_at->format('d/m/Y') }}
+                                                <i class="bi bi-calendar me-1"></i>{{ $item->published_at?->format('d/m/Y') }}
                                             </small>
                                         </div>
                                     </a>
@@ -132,7 +132,7 @@
                                                 {{ Str::limit($item->title, 50) }}
                                             </h6>
                                             <small class="text-muted">
-                                                <i class="bi bi-calendar me-1"></i>{{ $item->published_at->format('d/m/Y') }}
+                                                <i class="bi bi-calendar me-1"></i>{{ $item->published_at?->format('d/m/Y') }}
                                             </small>
                                         </div>
                                     </a>

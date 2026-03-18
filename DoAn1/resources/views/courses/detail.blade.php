@@ -143,38 +143,58 @@
                                 @endif
                             </div>
 
-                            <form action="{{ route('courses.registration') }}" method="POST" class="needs-validation">
-                                @csrf
-                                <input type="hidden" name="course_id" value="{{ $course->id }}">
-                                <x-app-input 
-                                    name="name" 
-                                    label="Họ và tên" 
-                                    placeholder="Nhập họ và tên" 
-                                    required 
-                                />
-                                <x-app-input 
-                                    type="email"
-                                    name="email" 
-                                    label="Email" 
-                                    placeholder="Nhập email" 
-                                    required 
-                                />
-                                <x-app-input 
-                                    type="tel"
-                                    name="phone" 
-                                    label="Số điện thoại" 
-                                    placeholder="Nhập số điện thoại" 
-                                    required 
-                                />
-                                <!-- reCAPTCHA -->
-                                @if (config('services.recaptcha.enabled', false))
-                                    <x-recaptcha form-type="course-registration" />
-                                @endif
+                            @auth
+                                <form action="{{ route('courses.registration') }}" method="POST" class="needs-validation">
+                                    @csrf
+                                    <input type="hidden" name="course_id" value="{{ $course->course_id }}">
+                                    <x-app-input 
+                                        name="name" 
+                                        label="Họ và tên"
+                                        value="{{ old('name', Auth::user()->name ?? '') }}"
+                                        placeholder="Nhập họ và tên" 
+                                        required 
+                                    />
+                                    <x-app-input 
+                                        type="email"
+                                        name="email" 
+                                        label="Email"
+                                        value="{{ old('email', Auth::user()->email ?? '') }}"
+                                        placeholder="Nhập email" 
+                                        required 
+                                    />
+                                    <x-app-input 
+                                        type="tel"
+                                        name="phone"
+                                        label="Số điện thoại"
+                                        value="{{ old('phone', Auth::user()->phone ?? '') }}"
+                                        placeholder="Nhập số điện thoại" 
+                                        required 
+                                    />
+                                    
+                                    <!-- reCAPTCHA -->
+                                    @if (config('services.recaptcha.enabled', false))
+                                        <x-recaptcha form-type="course-registration" />
+                                    @endif
 
-                                <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">
-                                    <i class="bi bi-check-circle me-2"></i>Đăng ký tư vấn
-                                </button>
-                            </form>
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">
+                                        <i class="bi bi-check-circle me-2"></i>Đăng ký tư vấn
+                                    </button>
+                                </form>
+                            @else
+                                <div class="alert alert-warning">
+                                    <i class="bi bi-shield-lock me-1"></i>
+                                    Vui lòng đăng nhập để gửi yêu cầu đăng ký khóa học.
+                                </div>
+                                @if (Route::has('auth.login'))
+                                    <a href="{{ route('auth.login') }}" class="btn btn-primary btn-lg w-100 fw-bold">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>Đăng nhập để đăng ký
+                                    </a>
+                                @elseif (Route::has('filament.admin.auth.login'))
+                                    <a href="{{ route('filament.admin.auth.login') }}" class="btn btn-primary btn-lg w-100 fw-bold">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>Đăng nhập
+                                    </a>
+                                @endif
+                            @endauth
 
                             <hr class="my-4">
                             <div class="text-center">

@@ -16,7 +16,7 @@ return new class extends Migration
         }
 
         Schema::create('chat_messages', function (Blueprint $table) {
-            $table->id();
+            $table->id('chat_message_id');
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('session_id', 120)->nullable()->index();
             $table->string('role', 20);
@@ -24,9 +24,9 @@ return new class extends Migration
             $table->string('ip_address', 45)->nullable();
             $table->string('user_agent', 512)->nullable();
             $table->timestamps();
-
+            
             $table->index(['user_id', 'created_at']);
-            $table->index(['session_id', 'created_at']);
+            $table->index(['session_id', 'created_at']); 
         });
     }
 

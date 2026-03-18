@@ -122,7 +122,7 @@ class NewsRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make()
                     ->label('Tạo tin tức mới')
                     ->mutateFormDataUsing(function (array $data): array {
-                        $data['category_id'] = $this->ownerRecord->id;
+                        $data['news_category_id'] = $this->ownerRecord->news_category_id;
                         return $data;
                     }),
             ])

@@ -760,7 +760,7 @@ PROMPT;
             ->limit($limit)
             ->get()
             ->map(fn ($msg) => [
-                'id' => $msg->id,
+                'chat_message_id' => $msg->chat_message_id,
                 'role' => $msg->role,
                 'message' => $msg->message,
                 'created_at' => $msg->created_at->format('H:i d/m/Y'),
