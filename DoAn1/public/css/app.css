@@ -2040,25 +2040,6 @@ img[data-loaded="true"] {
 }
 
 /* ==========================================================================
-     RECAPTCHA STYLES
-     ========================================================================== */
-
-.recaptcha-wrapper {
-    margin: 1rem 0;
-    align-items: center;
-}
-
-.recaptcha-wrapper .alert {
-    margin-top: 0.5rem;
-    padding: 0.75rem;
-    border-radius: 8px;
-    color: #e74c3c;
-    background-color: rgba(231, 76, 60, 0.1);
-    border: 1px solid rgba(231, 76, 60, 0.3);
-    font-size: 0.875rem;
-}
-
-/* ==========================================================================
     COURSE DETAIL PAGE STYLES
     ========================================================================== */
 

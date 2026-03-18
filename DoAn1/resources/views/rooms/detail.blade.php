@@ -239,11 +239,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- reCAPTCHA -->
-                                    @if (config('services.recaptcha.enabled', false))
-                                        <x-recaptcha form-type="room-booking" />
-                                    @endif
-
                                     <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold mt-3">
                                         <i class="bi bi-check-circle me-2"></i>Đặt phòng ngay
                                     </button>
@@ -290,10 +285,6 @@
     </section>
 
     <x-slot:scripts>
-        @if (config('services.recaptcha.enabled', false))
-            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-        @endif
-
         <script>
             function toggleRecurrence(type) {
                 const recurrenceDays = document.getElementById('recurrence-days');

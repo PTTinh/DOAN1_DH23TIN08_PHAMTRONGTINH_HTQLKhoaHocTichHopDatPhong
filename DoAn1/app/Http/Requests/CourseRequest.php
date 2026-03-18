@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\CoursePhoneRule;
-use App\Rules\RecaptchaRule;
 
 class CourseRequest extends FormRequest
 {
@@ -34,11 +33,10 @@ class CourseRequest extends FormRequest
                 new CoursePhoneRule($this->course_id),
             ],
         ];
-        if (\App\Helpers\RecaptchaHelper::isEnabled()) {
-            $rules['g-recaptcha-response'] = [new RecaptchaRule()];
-        }
+
         return $rules;
     }
+
     public function attributes(): array
     {
         return [
@@ -46,9 +44,9 @@ class CourseRequest extends FormRequest
             'name' => 'Họ và tên',
             'email' => 'Email',
             'phone' => 'Số điện thoại',
-            'g-recaptcha-response' => 'reCAPTCHA',
         ];
     }
+
     /**
      * Get custom messages for validator errors.
      *
@@ -71,7 +69,6 @@ class CourseRequest extends FormRequest
             'phone.string' => 'Số điện thoại phải là chuỗi ký tự.',
             'phone.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng.',
             'phone.unique' => 'Số điện thoại đã được đăng ký cho khóa học này.',
-            'g-recaptcha-response.recaptcha' => 'Xác minh reCAPTCHA không thành công. Vui lòng thử lại.',
         ];
     }
 }

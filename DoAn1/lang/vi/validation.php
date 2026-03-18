@@ -216,7 +216,6 @@ return [
         'purpose' => 'mục đích',
         'registration_date' => 'ngày đăng ký',
         'payment_status' => 'trạng thái thanh toán',
-        'g-recaptcha-response' => 'xác minh reCAPTCHA',
     ],
 
 ];

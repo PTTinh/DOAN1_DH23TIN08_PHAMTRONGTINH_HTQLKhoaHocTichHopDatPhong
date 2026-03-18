@@ -170,11 +170,6 @@
                                         placeholder="Nhập số điện thoại" 
                                         required 
                                     />
-                                    
-                                    <!-- reCAPTCHA -->
-                                    @if (config('services.recaptcha.enabled', false))
-                                        <x-recaptcha form-type="course-registration" />
-                                    @endif
 
                                     <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">
                                         <i class="bi bi-check-circle me-2"></i>Đăng ký tư vấn
@@ -222,8 +217,5 @@
     </section>
 
     <x-slot:scripts>
-        @if (config('services.recaptcha.enabled', false))
-            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-        @endif
     </x-slot:scripts>
 </x-layouts>

@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\RecaptchaRule;
 use Carbon\Carbon;
 
 class RoomRequest extends FormRequest
@@ -53,9 +52,7 @@ class RoomRequest extends FormRequest
         if ($room) {
             $rules['participants_count'] = 'required|integer|min:1|max:' . $room->capacity;
         }
-        if(\App\Helpers\RecaptchaHelper::isEnabled()){
-            $rules['g-recaptcha-response'] = [new RecaptchaRule()];
-        }
+
         return $rules;
     }
 
@@ -91,9 +88,9 @@ class RoomRequest extends FormRequest
             'name' => 'Tên khách hàng',
             'email' => 'Email khách hàng',
             'phone' => 'Số điện thoại khách hàng',
-            'g-recaptcha-response' => 'reCAPTCHA',
         ];
     }
+
     /**
      * Get custom messages for validator errors.
      *
@@ -141,7 +138,6 @@ class RoomRequest extends FormRequest
             'phone.string' => 'Số điện thoại khách hàng phải là chuỗi ký tự và không được chứa ký tự đặc biệt.',
             'phone.max' => 'Số điện thoại khách hàng không được vượt quá :max ký tự.',
             'phone.regex' => 'Số điện thoại khách hàng không hợp lệ. Vui lòng nhập đúng định dạng.',
-            'g-recaptcha-response.recaptcha' => 'Xác minh reCAPTCHA không thành công. Vui lòng thử lại.',
         ];
     }
 }
