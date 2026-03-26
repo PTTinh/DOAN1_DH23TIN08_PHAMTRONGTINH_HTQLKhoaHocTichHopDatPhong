@@ -41,12 +41,6 @@
                             <a href="{{ App\Helpers\SettingHelper::get('facebook_fanpage', '#') }}" class="social-link" title="Facebook" target="_blank">
                                 <i class="bi bi-facebook"></i>
                             </a>
-                            <a href="https://youtube.com" class="social-link" title="YouTube" target="_blank">
-                                <i class="bi bi-youtube"></i>
-                            </a>
-                            <a href="https://zalo.me/{{ App\Helpers\SettingHelper::get('zalo', '') }}" class="social-link" title="Zalo" target="_blank">
-                                <i class="bi bi-chat-dots-fill"></i>
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -56,7 +50,7 @@
 
     <!-- Header Navigation -->
     <header class="main-header">
-        <nav class="navbar navbar-expand-lg">
+        <nav class="navbar navbar-expand-xxl">
             <div class="container">
                 <!-- Logo -->
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -66,7 +60,7 @@
                 </a>
 
                 <!-- Mobile Actions -->
-                <div class="d-lg-none d-flex align-items-center gap-2">
+                <div class="d-xxl-none d-flex align-items-center gap-2">
                     <button class="btn btn-link p-2" data-bs-toggle="modal" data-bs-target="#searchModal">
                         <i class="bi bi-search text-dark fs-5"></i>
                     </button>
@@ -153,7 +147,7 @@
                     </ul>
 
                     <!-- Search & CTA (Desktop) -->
-                    <div class="d-none d-lg-flex align-items-center gap-3">
+                    <div class="d-none d-xxl-flex align-items-center gap-3">
                         <form action="{{ route('search') }}" method="GET" class="header-search" role="search">
                             <div class="input-group">
                                 <input type="text" name="q" class="form-control"
@@ -209,7 +203,7 @@
                         @endauth
                     </div>
 
-                    <div class="d-lg-none pt-3 border-top mt-3">
+                    <div class="d-xxl-none pt-3 border-top mt-3">
                         @auth
                             <div class="d-flex gap-2">
                                 @if (Route::has('auth.profile'))
@@ -268,12 +262,6 @@
                             <a href="{{ App\Helpers\SettingHelper::get('facebook_fanpage', '#') }}" class="footer-social-link" target="_blank">
                                 <i class="bi bi-facebook"></i>
                             </a>
-                            <a href="https://youtube.com" class="footer-social-link" target="_blank">
-                                <i class="bi bi-youtube"></i>
-                            </a>
-                            <a href="https://zalo.me/{{ App\Helpers\SettingHelper::get('zalo', '') }}" class="footer-social-link" target="_blank">
-                                <i class="bi bi-chat-dots-fill"></i>
-                            </a>
                         </div>
                     </div>
 
@@ -328,10 +316,7 @@
                         
                         <!-- Mini Map -->
                         <div class="footer-map mt-3">
-                            <iframe src="{{ App\Helpers\SettingHelper::get('google_map', '') }}"
-                                style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade">
-                            </iframe>
+                            {!! App\Helpers\SettingHelper::get('google_map', '') !!}
                         </div>
                     </div>
                 </div>

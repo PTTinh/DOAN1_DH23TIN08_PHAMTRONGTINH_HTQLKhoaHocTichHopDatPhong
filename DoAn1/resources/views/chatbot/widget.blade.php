@@ -72,8 +72,38 @@
 
         const formatMessage = (message) => {
             const escaped = escapeHtml(message || '');
+            const toAbsoluteUrl = (url) => {
+                if (!url) return '#';
+                if (/^https?:\/\//i.test(url)) return url;
+                if (url.startsWith('/')) return `${window.location.origin}${url}`;
+                return `${window.location.origin}/${url}`;
+            };
 
-            return escaped
+            const renderMarkdownLinks = (text) => text.replace(
+                /\[([^\]]+)]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g,
+                (match, label, url) => `<a href="${toAbsoluteUrl(url)}" target="_blank" rel="noopener noreferrer">${label}</a>`
+            );
+
+            const autoLinkText = (text) => {
+                const withHttpLinks = text.replace(
+                    /(?<!["'=])(https?:\/\/[^\s<)]+)/g,
+                    (url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`
+                );
+
+                return withHttpLinks.replace(
+                    /(^|\s)(\/(?:khoa-hoc|phong-hoc|tin-tuc)\/[a-zA-Z0-9\-_/]+)/g,
+                    (match, prefix, path) => `${prefix}<a href="${toAbsoluteUrl(path)}" target="_blank" rel="noopener noreferrer">${path}</a>`
+                );
+            };
+
+            const protectAnchorsAndAutoLink = (html) => html
+                .split(/(<a\b[^>]*>.*?<\/a>)/gi)
+                .map((part) => part.toLowerCase().startsWith('<a') ? part : autoLinkText(part))
+                .join('');
+
+            const withLinks = protectAnchorsAndAutoLink(renderMarkdownLinks(escaped));
+
+            return withLinks
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\n/g, '<br>');
         };

@@ -107,13 +107,6 @@
                                    class="btn btn-lg btn-primary" target="_blank">
                                     <i class="bi bi-facebook me-2"></i>Facebook
                                 </a>
-                                <a href="https://youtube.com" class="btn btn-lg btn-danger" target="_blank">
-                                    <i class="bi bi-youtube me-2"></i>YouTube
-                                </a>
-                                <a href="https://zalo.me/{{ App\Helpers\SettingHelper::get('zalo', '') }}" 
-                                   class="btn btn-lg btn-info text-white" target="_blank">
-                                    <i class="bi bi-chat-dots me-2"></i>Zalo
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -132,10 +125,7 @@
             </div>
             <div class="card overflow-hidden">
                 <div class="ratio ratio-21x9">
-                    <iframe src="{{ App\Helpers\SettingHelper::get('google_map', '') }}"
-                        style="border:0;" allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
+                    {!! App\Helpers\SettingHelper::get('google_map', '') !!}
                 </div>
             </div>
         </div>

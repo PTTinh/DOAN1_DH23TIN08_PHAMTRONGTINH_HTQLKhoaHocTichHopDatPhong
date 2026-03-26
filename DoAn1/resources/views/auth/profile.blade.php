@@ -176,8 +176,8 @@
                                                                         'pending' => 'Chờ duyệt',
                                                                         'approved' => 'Đã duyệt',
                                                                         'rejected' => 'Từ chối',
-                                                                        'cancelled_by_customer' => 'KH hủy',
-                                                                        'cancelled_by_admin' => 'Admin hủy',
+                                                                        'cancelled_by_customer' => 'Đã hủy',
+                                                                        'cancelled_by_admin' => 'Đã bị hủy bởi QTV',
                                                                         default => $booking->status,
                                                                     } }}
                                                                 </span>

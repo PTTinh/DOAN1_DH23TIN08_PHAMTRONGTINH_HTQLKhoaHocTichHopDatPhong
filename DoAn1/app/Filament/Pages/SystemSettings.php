@@ -53,7 +53,6 @@ class SystemSettings extends Page
                 'description' => $settings['description'] ?? '',
                 'google_map' => $settings['google_map'] ?? '',
                 'facebook_fanpage' => $settings['facebook_fanpage'] ?? '',
-                'zalo_embed' => $settings['zalo_embed'] ?? '',
                 'course_unit' => $settings['course_unit'] ?? 'khóa',
                 'room_rental_unit' => $settings['room_rental_unit'] ?? 'buổi',
                 'room_unit_to_hour' => $settings['room_unit_to_hour'] ?? '1',
@@ -70,7 +69,6 @@ class SystemSettings extends Page
                 'description' => '',
                 'google_map' => '',
                 'facebook_fanpage' => '',
-                'zalo_embed' => '',
                 'course_unit' => 'khóa',
                 'room_rental_unit' => 'buổi',
                 'room_unit_to_hour' => '1',
@@ -214,15 +212,6 @@ class SystemSettings extends Page
                             ->placeholder('Dán mã embed HTML của Facebook Fanpage')
                             ->rows(4)
                             ->helperText('Lấy mã nhúng từ Facebook và dán vào đây')
-                            ->extraAttributes([
-                                'style' => 'font-family: "Fira Code", "JetBrains Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace; font-size: 14px;'
-                            ]),
-
-                        Textarea::make('zalo_embed')
-                            ->label('Nhúng Zalo')
-                            ->placeholder('Dán mã embed HTML của Zalo')
-                            ->rows(4)
-                            ->helperText('Lấy mã nhúng từ Zalo và dán vào đây')
                             ->extraAttributes([
                                 'style' => 'font-family: "Fira Code", "JetBrains Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace; font-size: 14px;'
                             ]),

@@ -10,6 +10,7 @@ class ChatbotController extends Controller
 {
     public function __construct(private readonly ChatbotService $chatbotService)
     {
+        
     }
 
     public function chat(Request $request): JsonResponse

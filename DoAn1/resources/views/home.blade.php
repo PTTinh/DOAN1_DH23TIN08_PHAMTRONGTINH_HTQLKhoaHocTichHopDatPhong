@@ -122,10 +122,7 @@
                     <div class="col-lg-6">
                         <div class="position-relative">
                             <div class="ratio ratio-16x9 rounded-2xl overflow-hidden shadow-lg">
-                                <iframe src="{{ App\Helpers\SettingHelper::get('youtube_embed') }}" 
-                                    title="YouTube video" frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen></iframe>
+                                {!! App\Helpers\SettingHelper::get('youtube_embed') !!}
                             </div>
                         </div>
                     </div>

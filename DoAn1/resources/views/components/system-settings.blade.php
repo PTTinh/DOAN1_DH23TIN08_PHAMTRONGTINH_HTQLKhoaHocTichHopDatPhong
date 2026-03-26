@@ -79,16 +79,6 @@
         </div>
     @endif
 
-    {{-- Zalo --}}
-    @if(!empty($settings['zalo_embed']))
-        <div class="zalo-embed">
-            <h3>Zalo</h3>
-            <div class="zalo-container">
-                {!! $settings['zalo_embed'] !!}
-            </div>
-        </div>
-    @endif
-
 </div>
 
 <style>
